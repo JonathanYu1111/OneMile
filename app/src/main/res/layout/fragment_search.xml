@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".search.Fragment_Search">
+
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/calistoga"
+                android:textColor="@color/black"
+                android:layout_marginLeft="15dp"
+                android:text="Search"
+                android:textSize="45sp" />
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp">
+
+                    <EditText
+                        android:id="@+id/edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/edit_box_background"
+                        android:hint="Search for your destination"
+                        android:textColorHint="#9B9B9B"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="70dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true" />
+
+                    <ImageView
+                        android:id="@+id/search_button"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="21dp"
+                        android:background="@android:color/white"
+                        android:contentDescription="Search"
+                        android:src="@drawable/ic_question_mark" />
+
+                </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recent Search"
+                android:fontFamily="@font/aclonica"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_margin="15dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rs_rv"
+                android:layout_height="100dp"
+                android:layout_width="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search Result"
+                android:fontFamily="@font/aclonica"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_margin="15dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sr_rv"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

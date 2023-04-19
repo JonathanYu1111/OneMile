@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/category_building"
+            android:title="Historical  Building" />
+        <item
+            android:id="@+id/category_park"
+            android:title="Park" />
+        <item
+            android:id="@+id/category_library"
+            android:title="Library" />
+        <item
+            android:id="@+id/category_museum"
+            android:title="Museum" />
+    </group>
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/status_currently_open"
+            android:title="Currently open" />
+        <item
+            android:id="@+id/status_free"
+            android:title="Free" />
+        <item
+            android:id="@+id/status_not_free"
+            android:title="Not free" />
+    </group>
+</menu>
