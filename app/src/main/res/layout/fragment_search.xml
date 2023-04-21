@@ -29,7 +29,7 @@
                     android:layout_margin="16dp">
 
                     <EditText
-                        android:id="@+id/edit_text"
+                        android:id="@+id/search_edittext"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:background="@drawable/edit_box_background"
@@ -44,7 +44,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true" />
 
-                    <ImageView
+                    <Button
                         android:id="@+id/search_button"
                         android:layout_width="50dp"
                         android:layout_height="50dp"

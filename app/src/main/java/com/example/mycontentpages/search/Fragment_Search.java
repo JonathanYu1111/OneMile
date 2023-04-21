@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.mycontentpages.R;
 import com.example.mycontentpages.attractionInfo.Attraction;
@@ -32,6 +34,10 @@ public class Fragment_Search extends Fragment {
 
     List<Attraction> searchResult=new ArrayList<>();
 
+    private EditText mSearchEditText;
+    private Button mSearchButton;
+    private SearchHistory mSearchHistory;
+
     public Fragment_Search() {
         // Required empty public constructor
     }
@@ -41,7 +47,10 @@ public class Fragment_Search extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +59,10 @@ public class Fragment_Search extends Fragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_search, container, false);
         }
+
+        mSearchEditText = rootView.findViewById(R.id.search_edittext);
+        mSearchButton = rootView.findViewById(R.id.search_button);
+
         initView();
         return rootView;
 
@@ -59,8 +72,6 @@ public class Fragment_Search extends Fragment {
     private void initView() {
         dataTest1();
         dataTest2();
-
-
 
     }
 

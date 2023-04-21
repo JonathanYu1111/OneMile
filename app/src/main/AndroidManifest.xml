@@ -22,6 +22,9 @@
         <activity
             android:name=".login.MainWelcomeActivity"
             android:exported="false" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="false" />
         <!-- <activity -->
         <!-- android:name=".Help_Activity" -->
         <!-- android:exported="false" -->
@@ -33,6 +36,18 @@
             android:exported="false" />
         <activity
             android:name=".account.Account_guestUser"
+            android:exported="false"/>
+        <activity
+            android:name=".account.Account_info"
+            android:exported="false"/>
+        <activity
+            android:name=".account.SignIn"
+            android:exported="false"/>
+        <activity
+            android:name=".account.SignUpActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".search.Fragment_Search"
             android:exported="false"/>
 
         <!--

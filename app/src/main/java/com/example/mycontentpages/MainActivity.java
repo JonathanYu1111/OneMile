@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.example.mycontentpages.account.Account_guestUser;
 import com.example.mycontentpages.favorites.Fragment_Favorites;
 import com.example.mycontentpages.home.Fragment_Home;
+import com.example.mycontentpages.login.*;
 import com.example.mycontentpages.profile.Fragment_Profile_signed;
 import com.example.mycontentpages.search.Fragment_Search;
 
@@ -22,7 +23,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //fragment依托于viewpager,viewpager显示在Activity的layout上
     ViewPager2 viewPager;
+    LoginActivity l = new LoginActivity();
+
     int i=1;
+
+
+    //判断登录状态,i在哪里开始调用
+
+
+
 
     private LinearLayout llHome,llSearch,llFavorites,llProfile;
     private ImageView ivHome,ivSearch,ivFavorites,ivProfile,ivCurrent;
@@ -96,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent=new Intent(this, Account_guestUser.class);
 
         ivCurrent.setSelected(false);
+
+
         switch (position){
             case R.id.id_tag_home:
                 viewPager.setCurrentItem(0);
@@ -111,26 +122,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.id_tag_favorites:
                 //fake data:test page
-                if(i==1){
+                if(i == 1){
                     viewPager.setCurrentItem(2);
                 }else{
                     startActivity(intent);
                 }
             case 2:
-                if(i==1){
+                if(i == 1){
                     ivFavorites.setSelected(true);
                     ivCurrent=ivFavorites;
                 }
                 break;
             case R.id.id_tag_profile:
                 //fake data:test page
-                if(i==1){
+                if(i == 1){
                     viewPager.setCurrentItem(3);
                 }else{
                     startActivity(intent);
                 }
             case 3:
-                if(i==1){
+                if(i == 1){
                     ivProfile.setSelected(true);
                     ivCurrent=ivProfile;
                 }

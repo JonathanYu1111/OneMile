@@ -1,6 +1,7 @@
 package com.example.mycontentpages.search;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,7 +26,6 @@ public class RS_RecyclerViewAdapter extends RecyclerView.Adapter<RS_RecyclerView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view=View.inflate(context, R.layout.item_recent_search,null);
-
         return new MyViewHolder(view);
     }
 
