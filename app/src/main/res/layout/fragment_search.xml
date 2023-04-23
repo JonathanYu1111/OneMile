@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".search.Fragment_Search">
 
     <ScrollView
@@ -67,11 +68,15 @@
                 android:layout_margin="15dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rs_rv"
-                android:layout_height="100dp"
-                android:layout_width="match_parent">
-
-            </androidx.recyclerview.widget.RecyclerView>
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                 />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,13 +87,6 @@
                 android:textSize="20sp"
                 android:layout_margin="15dp"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/sr_rv"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent">
-
-            </androidx.recyclerview.widget.RecyclerView>
 
 
 

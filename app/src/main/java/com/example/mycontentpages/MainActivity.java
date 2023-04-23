@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ViewPager2 viewPager;
     LoginActivity l = new LoginActivity();
 
-    int i=1;
+    int i=0;
 
 
     //判断登录状态,i在哪里开始调用
