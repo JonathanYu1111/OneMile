@@ -81,40 +81,23 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //send request
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("http://8.208.25.129:8090")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        MemberService memberService = retrofit.create(MemberService.class);
-//        Call<Member> call = memberService.memberInfo();
-//
-//        call.enqueue(new Callback<Member>() {
-//            @Override
-//            public void onResponse(Call<Member> call, Response<Member> response) {
-//                // 处理成功响应
-//                Member body = response.body();
-//
-//                Log.e("TAG-ONE", "onResponse: success"+body);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Member> call, Throwable t) {
-//                // 处理失败响应
-//                Log.e("TAG-ONE", "onResponse: error" + t.getMessage());
-//            }
-//        });
-        try {
-            JSONObject json = new JSONObject();
-            json.put("username", userName);
-            json.put("password", passWord);
-            Log.e("TAG-ONE", String.valueOf(json));
-            String s = OkHttp.sendPostRequest("http://10.58.196.244:8090/member/loginVerification", String.valueOf(json));
-            Log.e("TAG-ONE", s);
-        } catch (Exception e) {
-            Log.i("post","post fail");
-            Log.e("TAG-ONE"," "+ e.getMessage());
-        }
+        new Thread(()->{
+            try {
+                //send json data convert to json
+                JSONObject json = new JSONObject();
+                json.put("username", userName);
+                json.put("password", passWord);
+                String s = OkHttp.sendPostRequest("http://172.16.3.37:8090/member/loginVerification", String.valueOf(json));
+
+                //获取返回数据在页面上进行更新
+                runOnUiThread(()->{
+
+                });
+            } catch (Exception e) {
+                Toast.makeText(this,"Network connection failure",Toast.LENGTH_LONG).show();
+                throw new RuntimeException(e);
+            }
+        }).start();
 
         if (userName.equals("abc") && passWord.equals("abc")) {
             Toast.makeText(this,success,Toast.LENGTH_LONG).show();
