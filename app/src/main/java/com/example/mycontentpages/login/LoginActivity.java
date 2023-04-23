@@ -3,6 +3,7 @@ package com.example.mycontentpages.login;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     //用于判断登录状态
     public int flag = 0;
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -116,15 +118,16 @@ public class LoginActivity extends AppCompatActivity {
 
         if (userName.equals("abc") && passWord.equals("abc")) {
             Toast.makeText(this,success,Toast.LENGTH_LONG).show();
-
-
             intent = new Intent(this, MainActivity.class);
-            flag = 1;
+            intent.putExtra("login_success", true);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
             startActivity(intent);
         }else{
             Toast.makeText(this,fail,Toast.LENGTH_LONG).show();
         }
    }
+
 
 
 }

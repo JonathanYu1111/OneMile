@@ -1,29 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+s<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Sort by categories"
+        android:enabled="false" />
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/category_building"
-            android:title="Historical  Building" />
+            android:title="Historical  Building"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
         <item
             android:id="@+id/category_park"
-            android:title="Park" />
+            android:title="Park"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
         <item
             android:id="@+id/category_library"
-            android:title="Library" />
+            android:title="Library"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
         <item
             android:id="@+id/category_museum"
-            android:title="Museum" />
+            android:title="Museum"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
     </group>
 
+    <item
+        android:title="Sort by other conditions"
+        android:enabled="false" />
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/status_currently_open"
-            android:title="Currently open" />
+            android:title="Currently open"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
         <item
             android:id="@+id/status_free"
-            android:title="Free" />
+            android:title="Free"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
         <item
             android:id="@+id/status_not_free"
-            android:title="Not free" />
+            android:title="Not free"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
     </group>
 </menu>

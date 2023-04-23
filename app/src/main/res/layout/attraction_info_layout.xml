@@ -305,6 +305,7 @@
 
                 <!-- 右边用自定义控件RatingBar显示星星 -->
                 <RatingBar
+                    android:isIndicator="true"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
                     android:layout_height="40dp"

@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //fragment依托于viewpager,viewpager显示在Activity的layout上
     ViewPager2 viewPager;
+
+
     LoginActivity l = new LoginActivity();
 
     int i=0;
@@ -40,6 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getBoolean("login_success", false)) {
+            i = 1;
+        }
+
+        System.out.println(i);
         //初始化viewpager
         initPager();
         //初始化UI
