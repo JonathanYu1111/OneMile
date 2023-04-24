@@ -1,5 +1,6 @@
 package com.example.mycontentpages.attractionInfo;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +35,12 @@ public class AttractionDetailsActivity extends AppCompatActivity {
 
         initiateView();
 
+        // 获取 ActionBar 对象
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // 在 ActionBar 上显示返回按钮
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
 
 
@@ -75,8 +83,9 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
     private void getAndSetAttractionData() {
-
-        attraction=(Attraction) getIntent().getSerializableExtra("attraction");
+        Bundle bundle = getIntent().getExtras();
+        attraction = (Attraction) bundle.getSerializable("attraction");
+        //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
         attPicsUrl.add(attraction.getPicURL());
         TextView tv_description=findViewById(R.id.attr_info_description);
         TextView tv_name=findViewById(R.id.attr_info_name);
@@ -171,6 +180,16 @@ public class AttractionDetailsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
 }

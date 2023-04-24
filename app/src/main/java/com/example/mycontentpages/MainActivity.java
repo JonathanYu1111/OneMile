@@ -21,14 +21,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //fragment依托于viewpager,viewpager显示在Activity的layout上
-    ViewPager2 viewPager;
 
 
     LoginActivity l = new LoginActivity();
 
-    int i=0;
+    int i=1;
 
+    Fragment_Home bf1=new Fragment_Home();
+    Fragment_Search bf2=new Fragment_Search();
+    Fragment_Favorites bf3=new Fragment_Favorites();
+    Fragment_Profile_signed bf4=new Fragment_Profile_signed();
 
     //判断登录状态,i在哪里开始调用
 
@@ -77,36 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void initPager() {
-        viewPager=findViewById(R.id.vp1);
-        ArrayList<Fragment> fragments=new ArrayList<>();
-        Fragment_Home bf1=new Fragment_Home();
-        Fragment_Search bf2=new Fragment_Search();
-        Fragment_Favorites bf3=new Fragment_Favorites();
-        Fragment_Profile_signed bf4=new Fragment_Profile_signed();
-        fragments.add(bf1);
-        fragments.add(bf2);
-        fragments.add(bf3);
-        fragments.add(bf4);
-        MyFragmentPagerAdapter pagerAdapter=new MyFragmentPagerAdapter(getSupportFragmentManager(),
-                getLifecycle(),fragments);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                changeTab(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-            }
-        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container,bf1)
+                .commit();
     }
 
     private void changeTab(int position) {
@@ -118,44 +93,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (position){
             case R.id.id_tag_home:
-                viewPager.setCurrentItem(0);
-            case 0:
+                //viewPager.setCurrentItem(0);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, bf1)
+                        .commit();
                 ivHome.setSelected(true);
                 ivCurrent=ivHome;
                 break;
             case R.id.id_tag_search:
-                viewPager.setCurrentItem(1);
-            case 1:
+                //viewPager.setCurrentItem(1);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, bf2)
+                        .commit();
                 ivSearch.setSelected(true);
                 ivCurrent=ivSearch;
                 break;
             case R.id.id_tag_favorites:
                 //fake data:test page
                 if(i == 1){
-                    viewPager.setCurrentItem(2);
+                    //viewPager.setCurrentItem(2);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, bf3)
+                            .commit();
+                    ivFavorites.setSelected(true);
+                    ivCurrent=ivFavorites;
                 }else{
                     startActivity(intent);
                 }
-            case 2:
-                if(i == 1){
-                    ivFavorites.setSelected(true);
-                    ivCurrent=ivFavorites;
-                }
+
                 break;
             case R.id.id_tag_profile:
                 //fake data:test page
                 if(i == 1){
-                    viewPager.setCurrentItem(3);
+                    //viewPager.setCurrentItem(3);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, bf4)
+                            .commit();
+                    ivProfile.setSelected(true);
+                    ivCurrent=ivProfile;
                 }else{
                     startActivity(intent);
                 }
-            case 3:
-                if(i == 1){
-                    ivProfile.setSelected(true);
-                    ivCurrent=ivProfile;
-                }
+
                 break;
         }
+
     }
 
     @Override

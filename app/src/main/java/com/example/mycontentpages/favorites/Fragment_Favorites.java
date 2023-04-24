@@ -37,7 +37,6 @@ public class Fragment_Favorites extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -52,8 +51,30 @@ public class Fragment_Favorites extends Fragment {
     }
 
     private void initView() {
+        testData();
+           RecyclerView recyclerView= rootView.findViewById(R.id.favorites_rv);
+           LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+           recyclerView.setLayoutManager(linearLayoutManager);
+           System.out.println("ceshi"+favoriteAttraction.size());//test
+           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoriteAttraction,getContext());
+           recyclerView.setAdapter(favorite_recyclerViewAdapter);
+           favorite_recyclerViewAdapter.setOnItemClickListener(new Favorite_RecyclerViewAdapter.OnItemClickListener() {
+               @Override
+               public void onItemClick(int position) {
+                   Bundle bundle = new Bundle();
+                   Attraction attraction=favoriteAttraction.get(position);
+                   bundle.putSerializable("attraction",attraction);
+                   Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
+                   //intent.putExtra("attraction", favoriteAttraction.get(position));
+                   intent.putExtras(bundle);
+                   startActivity(intent);
+
+               }
+           });
 
 
+    }
+    public void testData(){
         //test1: add data into favorites_rv
         //final version: get those data from backend
         List<String> picsURL=new ArrayList<>();//just for test data
@@ -66,29 +87,14 @@ public class Fragment_Favorites extends Fragment {
                 picsURL.add("https://images.unsplash.com/photo-1675111575738-80a06bbdb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
             }
         }
-        for(int i=0;i<20;i++){
-            String name="place"+i;
-            String description=name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"
-                    +name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"
-                    +name+"-"+name+"-"+name+"-"+name+"-"+name+"-" +name+"-"+name+"-"
-                    +name+"-"+name+"-"+name+"-"+name;
-            Attraction attraction=new Attraction(picsURL.get(i),name,description);
+        for(int i=0;i<20;i++) {
+            String name = "place" + i;
+            String description = name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
+                    + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
+                    + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
+                    + name + "-" + name + "-" + name + "-" + name;
+            Attraction attraction = new Attraction(picsURL.get(i), name, description);
             favoriteAttraction.add(attraction);
-
-           RecyclerView recyclerView= rootView.findViewById(R.id.favorites_rv);
-           LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
-           recyclerView.setLayoutManager(linearLayoutManager);
-           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoriteAttraction,getContext());
-           recyclerView.setAdapter(favorite_recyclerViewAdapter);
-           favorite_recyclerViewAdapter.setOnItemClickListener(new Favorite_RecyclerViewAdapter.OnItemClickListener() {
-               @Override
-               public void onItemClick(int position) {
-                   Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-                   intent.putExtra("attraction", favoriteAttraction.get(position));
-                   startActivity(intent);
-               }
-           });
         }
-
     }
 }

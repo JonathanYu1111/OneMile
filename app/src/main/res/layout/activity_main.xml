@@ -11,14 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp1"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            android:id="@+id/fragment_container"/>
+<!--        <androidx.viewpager2.widget.ViewPager2-->
+<!--            android:id="@+id/vp1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"/>-->
 
     </FrameLayout>
+
 
     <include layout="@layout/bottom_navbar"/>
 </LinearLayout>
