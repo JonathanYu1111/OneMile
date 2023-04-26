@@ -25,12 +25,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LoginActivity l = new LoginActivity();
 
-    int i=1;
+    int i=0;
 
     Fragment_Home bf1=new Fragment_Home();
     Fragment_Search bf2=new Fragment_Search();
     Fragment_Favorites bf3=new Fragment_Favorites();
     Fragment_Profile_signed bf4=new Fragment_Profile_signed();
+
+    Account_guestUser gf=new Account_guestUser();
+
 
     //判断登录状态,i在哪里开始调用
 
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void changeTab(int position) {
 
-        Intent intent=new Intent(this, Account_guestUser.class);
+//        Intent intent=new Intent(this, Account_guestUser.class);
 
         ivCurrent.setSelected(false);
 
@@ -118,7 +121,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ivFavorites.setSelected(true);
                     ivCurrent=ivFavorites;
                 }else{
-                    startActivity(intent);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, gf)
+                            .commit();
+                    ivFavorites.setSelected(true);
+                    ivCurrent=ivFavorites;
                 }
 
                 break;
@@ -132,7 +139,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ivProfile.setSelected(true);
                     ivCurrent=ivProfile;
                 }else{
-                    startActivity(intent);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, gf)
+                            .commit();
+                    ivProfile.setSelected(true);
+                    ivCurrent=ivProfile;
                 }
 
                 break;

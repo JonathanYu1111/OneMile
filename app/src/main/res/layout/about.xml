@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/about_section"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/newcastleuniversity_image"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="16dp"
+        android:contentDescription="Newcastle University" />
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/about_description1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="At Our 1mile App, we have developed an application that showcases various tourist attractions in Newcastle."
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
+
+    <TextView
+        android:id="@+id/about_description2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Our goal is to make it easy for travelers to explore and discover the best that the city has to offer."
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/about_description3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Our team ensure that the app featured user-friendly interface and innovative features to enhance the travel experience."
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/about_description4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="With our app, travelers can confidently explore Newcastle and make unforgettable memories."
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/about_description5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Team Group13,Msc Computer Science,Newcastle University."
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"/>
+
+
+
+</LinearLayout>

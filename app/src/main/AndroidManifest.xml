@@ -33,13 +33,19 @@
         <!-- android:theme="@style/Theme.MyContentPages.NoActionBar" /> -->
         <!-- 组件必须在清单中注册 -->
         <activity
+            android:name=".profile.Reset_psw"
+            android:exported="false" />
+        <activity
+            android:name=".profile.About"
+            android:exported="false" />
+        <activity
             android:name=".attractionInfo.AttractionDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".account.Account_guestUser"
             android:exported="false"/>
         <activity
-            android:name=".account.Account_info"
+            android:name=".profile.Reset_psw"
             android:exported="false"/>
         <activity
             android:name=".account.SignIn"
