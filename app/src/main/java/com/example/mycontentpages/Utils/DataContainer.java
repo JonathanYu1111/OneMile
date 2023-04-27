@@ -27,6 +27,12 @@ public class DataContainer {
         }
 
         public static void initPlaces() throws IOException {
+//            String s = OkHttp.sendGetRequest("http://172.20.10.3:8090/place/get");
+//            Log.e("body",s);
+//            List<Place> places = JSON.parseArray(s, Place.class);
+//            placeContainer=places;
+
+
             Request request = new Request.Builder()
                     .url("http://172.20.10.3:8090/place/get")
                    // .url("http://10.183.135.5:8090/place/get")

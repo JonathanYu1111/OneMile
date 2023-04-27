@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //初始化 context
+        context = getApplicationContext();
+
         initThread = new Thread(()->{
             try {
                 DataContainer.initialize();
@@ -81,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //初始化UI
         initTabView();
 
-        //初始化 context
-        context = getApplicationContext();
 
     }
 
