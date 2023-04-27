@@ -1,6 +1,7 @@
 package com.example.mycontentpages.favorites;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,19 +17,26 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_RecyclerViewAdapter.MyViewHolder> {
+
+    private final RecyclerViewInterface recyclerViewInterface;
     private List<Attraction> data;
     private Context context;
 
-    public Favorite_RecyclerViewAdapter(List<Attraction> data, Context context) {
+    public Favorite_RecyclerViewAdapter(List<Attraction> data, Context context,RecyclerViewInterface recyclerViewInterface) {
         this.data = data;
         this.context = context;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
     @Override
     public Favorite_RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view=View.inflate(context, R.layout.item_favorites_attraction,null);
-        return new MyViewHolder(view);
+//        View view=View.inflate(context, R.layout.item_favorites_attraction,null);
+//        return new MyViewHolder(view);
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.item_favorites_attraction,parent,false);
+        return new Favorite_RecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
     }
 
     @Override
@@ -45,24 +53,35 @@ public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_
         return data==null?0:data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_name;
         private TextView tv_description;
         private ImageView tv_img;
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             tv_name=itemView.findViewById(R.id.f3_tv_name);
             tv_description=itemView.findViewById(R.id.f3_tv_description);
             tv_img=itemView.findViewById(R.id.f3_tv_img);
 
-            View.OnClickListener listener=new View.OnClickListener() {
+//            View.OnClickListener listener=new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    onItemClickListener.onItemClick(getBindingAdapterPosition());
+//                }
+//            };
+//            tv_img.setOnClickListener(listener);
+//            tv_name.setOnClickListener(listener);
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onItemClick(getBindingAdapterPosition());
+                    if(recyclerViewInterface != null) {
+                        int pos = getAbsoluteAdapterPosition();
+                        if(pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
                 }
-            };
-            tv_img.setOnClickListener(listener);
-            tv_name.setOnClickListener(listener);
+            });
         }
     }
     private OnItemClickListener onItemClickListener;

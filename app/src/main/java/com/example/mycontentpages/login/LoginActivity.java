@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject();
                 json.put("username", userName);
                 json.put("password", passWord);
-                String s = OkHttp.sendPostRequest("http://172.16.3.37:8090/member/loginVerification", String.valueOf(json));
+                String s = OkHttp.sendPostRequest("http://10.58.198.132:8090/member/loginVerification", String.valueOf(json));
                 Log.e("Tag-one", s);
                 //获取返回数据在页面上进行更新
                 runOnUiThread(()->{

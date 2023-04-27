@@ -23,7 +23,7 @@ import java.util.List;
  * Use the {@link Fragment_Home#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_Favorites extends Fragment {
+public class Fragment_Favorites extends Fragment implements RecyclerViewInterface{
 
     View rootView;
     List<Attraction> favoriteAttraction=new ArrayList<>();
@@ -36,7 +36,16 @@ public class Fragment_Favorites extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+//        RecyclerView recyclerView = rootView.findViewById(R.id.favorites_rv);
+//        setUpAttractions();
+
+    }
+
+    private void setUpAttractions() {
+        testData();
     }
 
     @Override
@@ -51,27 +60,32 @@ public class Fragment_Favorites extends Fragment {
     }
 
     private void initView() {
+        //添加测试数据
         testData();
            RecyclerView recyclerView= rootView.findViewById(R.id.favorites_rv);
            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
            recyclerView.setLayoutManager(linearLayoutManager);
            System.out.println("ceshi"+favoriteAttraction.size());//test
-           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoriteAttraction,getContext());
+           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoriteAttraction,getContext(),this);
            recyclerView.setAdapter(favorite_recyclerViewAdapter);
-           favorite_recyclerViewAdapter.setOnItemClickListener(new Favorite_RecyclerViewAdapter.OnItemClickListener() {
-               @Override
-               public void onItemClick(int position) {
-                   Bundle bundle = new Bundle();
-                   Attraction attraction=favoriteAttraction.get(position);
-                   bundle.putSerializable("attraction",attraction);
-                   Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-                   //intent.putExtra("attraction", favoriteAttraction.get(position));
-                   intent.putExtras(bundle);
-                   startActivity(intent);
 
-               }
-           });
-
+//           favorite_recyclerViewAdapter.setOnItemClickListener(new Favorite_RecyclerViewAdapter.OnItemClickListener() {
+//               @Override
+//               public void onItemClick(int position) {
+//                   Bundle bundle = new Bundle();
+//                   Attraction attraction=favoriteAttraction.get(position);
+//                   bundle.putSerializable("attraction",attraction);
+//                   Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
+//                   //intent.putExtra("attraction", favoriteAttraction.get(position));
+//                   intent.putExtra("name", favoriteAttraction.get(position).getName());
+//                   intent.putExtra("description", favoriteAttraction.get(position).getDescription());
+//                   intent.putExtra("picUrl", favoriteAttraction.get(position).getPicURL());
+//                   intent.putExtras(bundle);
+//                   startActivity(intent);
+//
+//               }
+//           });
+//
 
     }
     public void testData(){
@@ -96,5 +110,15 @@ public class Fragment_Favorites extends Fragment {
             Attraction attraction = new Attraction(picsURL.get(i), name, description);
             favoriteAttraction.add(attraction);
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
+        intent.putExtra("name", favoriteAttraction.get(position).getName());
+        intent.putExtra("description", favoriteAttraction.get(position).getDescription());
+        intent.putExtra("picUrl", favoriteAttraction.get(position).getPicURL());
+
+        startActivity(intent);
     }
 }
