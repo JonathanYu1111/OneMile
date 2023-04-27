@@ -2,8 +2,6 @@ package com.example.mycontentpages.Utils;
 
 import android.util.Log;
 
-import com.example.mycontentpages.data.Place;
-
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -14,13 +12,16 @@ import okhttp3.Response;
 
 public class OkHttp {
 
-    private static final OkHttpClient httpClient = new OkHttpClient();
-
     public static String sendGetRequest(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new HandlerUtils())
+                .build();
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        try (Response response = httpClient.newCall(request).execute()) {
+
+        try (Response response = client.newCall(request).execute()) {
             return response.body().string();
         }
     }
@@ -28,13 +29,17 @@ public class OkHttp {
     public static String sendPostRequest(String url, String jsonBody) throws Exception{
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(JSON, jsonBody);
+        // add a interceptor
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new HandlerUtils())
+                .build();
 
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .build();
 
-        Response response = httpClient.newCall(request).execute();
+        Response response = client.newCall(request).execute();
         if (response==null){Log.i("response","response is null");}
         String resData = response.body().string();
 

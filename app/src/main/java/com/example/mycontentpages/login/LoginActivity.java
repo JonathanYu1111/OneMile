@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.mycontentpages.MainActivity;
 import com.example.mycontentpages.R;
 import com.example.mycontentpages.Utils.OkHttp;
+import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.account.Account_guestUser;
 import com.example.mycontentpages.account.SignUpActivity;
 import com.example.mycontentpages.domain.Member;
@@ -87,14 +88,18 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject();
                 json.put("username", userName);
                 json.put("password", passWord);
-                String s = OkHttp.sendPostRequest("http://10.58.198.132:8090/member/loginVerification", String.valueOf(json));
-                Log.e("Tag-one", s);
+                String s = OkHttp.sendPostRequest("http://172.16.3.37:8060/member/loginVerification", String.valueOf(json));
+
+                JSONObject jsonObject = new JSONObject(s);
+                String token = jsonObject.getJSONObject("data").getString("token");
+                // store the token
+                SpUtils.putString(MainActivity.getContext(), "token", token);
+
                 //获取返回数据在页面上进行更新
                 runOnUiThread(()->{
 
                 });
             } catch (Exception e) {
-                Toast.makeText(this,"Network connection failure",Toast.LENGTH_LONG).show();
                 throw new RuntimeException(e);
             }
         }).start();

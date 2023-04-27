@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.Utils.OkHttp;
+import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.account.Account_guestUser;
 import com.example.mycontentpages.favorites.Fragment_Favorites;
 import com.example.mycontentpages.home.Fragment_Home;
@@ -43,7 +45,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //判断登录状态,i在哪里开始调用
     public  static Thread initThread;
 
+    // static context
+    public static Context context;
 
+    // get context
+    public static Context getContext() {
+        return context;
+    }
 
 
     private LinearLayout llHome,llSearch,llFavorites,llProfile;
@@ -73,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //初始化UI
         initTabView();
 
+        //初始化 context
+        context = getApplicationContext();
 
     }
 
