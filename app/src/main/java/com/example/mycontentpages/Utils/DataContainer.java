@@ -39,6 +39,7 @@ public class DataContainer {
             if (response.isSuccessful()) {
                 ResponseBody body = response.body();
                 String jsonStr = body.string();
+                Log.i("body",jsonStr);
                 List<Place> places = JSON.parseArray(jsonStr, Place.class);
                 placeContainer=places;
                 Log.i("DATA","places initialize successfully");

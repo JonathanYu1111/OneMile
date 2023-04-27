@@ -2,6 +2,8 @@ package com.example.mycontentpages.Utils;
 
 import android.util.Log;
 
+import com.example.mycontentpages.data.Place;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -18,7 +20,6 @@ public class OkHttp {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         try (Response response = httpClient.newCall(request).execute()) {
             return response.body().string();
         }
