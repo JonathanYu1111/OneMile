@@ -9,6 +9,7 @@ import android.content.Context;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,8 +22,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mycontentpages.MainActivity;
+import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
 import com.example.mycontentpages.R;
+import com.example.mycontentpages.data.Place;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -31,6 +35,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,12 +66,21 @@ public class MapsFragment extends Fragment {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private Marker myLocationMarker;
-    private  static double testLat=54.978;
-    private static double testLng=-1.6178;
-    ArrayList<MarkerOptions> markerOptionList=new ArrayList<MarkerOptions>();
-    ArrayList<Marker> markers=new ArrayList<>();
-    GoogleMap thisMap;
-    private static boolean locationUpdate= true;
+    private static double defaultLat=54.969697+0.02;
+    private static double defaultLng=-1.624609+0.02;
+    private  static double testLat=defaultLat;
+    private static double testLng=defaultLng;
+    private static double myRealLat;
+    private static double myRealLng;
+
+    private static  ArrayList<MarkerOptions> markerOptionList=new ArrayList<MarkerOptions>();
+    private static ArrayList<Marker> markers=new ArrayList<>();
+    private   static GoogleMap thisMap;
+    private   static Circle displayCircle;
+    private static Double pointChangeIndex=0.003;
+
+    private static Integer VisualDistance=1000;
+    private static boolean testMode= true;
 
     /////////////////////////////////////////////////////////////
     View rootView;
@@ -82,9 +97,7 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            Button  button_myLocation;
 
-            button_myLocation=getActivity().findViewById(R.id.switchButton);
 
             thisMap=googleMap;
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -155,39 +168,39 @@ public class MapsFragment extends Fragment {
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-
                 if(location!=null){
-                    LatLng myLatLng=new LatLng(location.getLatitude(),location.getLongitude());
-                    //add  element options
-                    MarkerOptions marker_myLocation=new MarkerOptions().position(myLatLng).title("Current Location");
+                    myRealLat=location.getLatitude();
+                    myRealLng=location.getLongitude();
+
+                    //加载初始位置：测试位置
+                    LatLng defaultLatLng=new LatLng(defaultLat,defaultLng);
+                    MarkerOptions marker_myLocation=new MarkerOptions().position(defaultLatLng).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     myLocationMarker = thisMap.addMarker(marker_myLocation);
                     CircleOptions circleOptions = new CircleOptions()
-                            .center(myLatLng)
-                            .radius(2000) // radius in meters
+                            .center(defaultLatLng)
+                            .radius(VisualDistance) // radius: "VisualDistance" meters
                             .strokeWidth(2)
                             .strokeColor(Color.BLUE)
                             .fillColor(Color.argb(70, 0, 100, 10));
-                    //add  elements
-
-                    thisMap.addMarker(marker_myLocation);
-
-                    thisMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 13));
-
-                    double testlat=54.978;
-                    double testlng=-1.6178;
-                    markerOptionList.add(new MarkerOptions().position(new LatLng(testlat+0.018, testlng+0.015)).title("Marker1").snippet("Marker1 Snippet"));
-                    markerOptionList.add(new MarkerOptions().position(new LatLng(testlat+0.028, testlng+0.025)).title("Marker2").snippet("Marker2 Snippet"));
-                    markerOptionList.add(new MarkerOptions().position(new LatLng(testlat+0.040, testlng+0.035)).title("Marker3").snippet("Marker3 Snippet"));
-                    markerOptionList.add(new MarkerOptions().position(new LatLng(testlat+0.051, testlng+0.045)).title("Marker4").snippet("Marker4 Snippet"));
-                    markerOptionList.add(new MarkerOptions().position(new LatLng(testlat+0.060, testlng+0.052)).title("Marker5").snippet("Marker5 Snippet"));
-
-                    Circle displayCircle= thisMap.addCircle(circleOptions);
-
+                    thisMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng, 14));
+                    try {
+                        MainActivity.initThread.join();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    for(Place place: DataContainer.getPlaceContainer()){
+                        markerOptionList.add(new MarkerOptions().position(new LatLng(place.getLatitude(), place.getLongitude())).title(place.getName()).snippet(place.getName()+"Snippet").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    }
+                    displayCircle= thisMap.addCircle(circleOptions);
+                    //加载所有marker
                     for (MarkerOptions mo:markerOptionList){
                         Marker newMarker=thisMap.addMarker(mo);
                         newMarker.setVisible(false);
                         markers.add(newMarker);
                     }
+                    updateView();
+
+
                     {   //without method
                         Context context=getActivity();
                         locationManager = (LocationManager) ContextCompat.getSystemService(context,LocationManager.class);
@@ -198,32 +211,16 @@ public class MapsFragment extends Fragment {
                         locationListener = new LocationListener() {
                             @Override
                             public void onLocationChanged(Location location) {
-                                if (locationUpdate==false){return;}
-                                testLat += 0.01;
-                                testLng += 0.01;
-                                LatLng newestLatLng = new LatLng(testLat, testLng);
-                                myLocationMarker.setPosition(newestLatLng);
-                                thisMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newestLatLng, thisMap.getCameraPosition().zoom));
-                                Log.i("Location", "Location changed");
-                                displayCircle.setCenter(newestLatLng);
-
-                                for(Marker m:markers){
-                                    Location location1=new Location("");
-                                    Location location2=new Location("");
-                                    location1.setLatitude(testLat);
-                                    location1.setLongitude(testLng);
-                                    location2.setLatitude(m.getPosition().latitude);
-                                    location2.setLongitude(m.getPosition().longitude);
-                                    if(location1.distanceTo(location2)<=2000){
-                                        m.setVisible(true);
-                                    }else{
-                                        m.setVisible(false);
-                                    }
-
+                                if (testMode==true){return;}
+                                if(testMode=false){
+                                    testLat=location.getLatitude();
+                                    testLng=location.getLongitude();
+                                    updateView();
                                 }
+
                             }
                         };
-                        locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 4000, 0, locationListener);
+                        locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 3000, 0, locationListener);
                     }
 
                     Button switchButton=getActivity().findViewById(R.id.switchButton);
@@ -234,20 +231,60 @@ public class MapsFragment extends Fragment {
                             if (status != ConnectionResult.SUCCESS) {
                                 if (GoogleApiAvailability.getInstance().isUserResolvableError(status)) {
                                     GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), status, 2404).show();
-                                    Toast.makeText(getActivity(),"Please get GooglePlay service connected",Toast.LENGTH_SHORT);
-                                }else{Toast.makeText(getActivity(),"Can not connect to GooglePlay service",Toast.LENGTH_LONG);}
+                                    Toast.makeText(getActivity(),"Please get GooglePlay service connected",Toast.LENGTH_SHORT).show();
+
+                                }else{Toast.makeText(getActivity(),"Can not connect to GooglePlay service",Toast.LENGTH_LONG).show();}
                             }
 
-
-                            if(locationUpdate==true){
-                                locationUpdate=false;
-                                Log.i("switchButton","Stop updating");
-                            }else {locationUpdate=true;
-                                Log.i("switchButton","Start updating");}
-
+                            if(testMode==true){
+                                testMode=false;
+                                testLat=myRealLat;
+                                testLng=myRealLng;
+                                updateView();
+                                Log.i("switchButton","switch to real mode");
+                            }else {testMode=true;
+                                testLat=defaultLat;
+                                testLng=defaultLng;
+                                updateView();
+                                Log.i("switchButton","switch to test mode");}
                         }
-
                     });
+
+                    Button button_up,button_left,button_right,button_down;
+                    button_up=getActivity().findViewById(R.id.upButton);
+                    button_left=getActivity().findViewById(R.id.leftButton);
+                    button_right=getActivity().findViewById(R.id.rightButton);
+                    button_down=getActivity().findViewById(R.id.downButton);
+                    button_up.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            testLat+=pointChangeIndex;
+                            updateView();
+                        }
+                    });
+                    button_down.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            testLat-=pointChangeIndex;
+                            updateView();
+                        }
+                    });
+                    button_left.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            testLng-=pointChangeIndex;
+                            updateView();
+                        }
+                    });
+                    button_right.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            testLng+=pointChangeIndex;
+                            updateView();
+                        }
+                    });
+
+
 
                     thisMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
@@ -256,17 +293,32 @@ public class MapsFragment extends Fragment {
                             Toast.makeText(getActivity(),"经度:"+marker.getPosition().latitude+"\n纬度："+marker.getPosition().longitude,Toast.LENGTH_LONG).show();
                             return true;
                         }
-
-
-
-
-
-
                     });
                 }}
+        });}
+    public void updateView(){
+        LatLng newestLatLng = new LatLng(testLat, testLng);
+        myLocationMarker.setPosition(newestLatLng);
+        thisMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newestLatLng, thisMap.getCameraPosition().zoom));
+        Log.i("Location", "Location changed");
+        displayCircle.setCenter(newestLatLng);
 
+        for(Marker m:markers){
+            Location location1=new Location("");
+            Location location2=new Location("");
+            location1.setLatitude(testLat);
+            location1.setLongitude(testLng);
+            location2.setLatitude(m.getPosition().latitude);
+            location2.setLongitude(m.getPosition().longitude);
+            if(location1.distanceTo(location2)<=VisualDistance){
+                m.setVisible(true);
+            }else{
+                m.setVisible(false);
+            }
 
-        });}}
+        }
+    }
+}
 
 
 

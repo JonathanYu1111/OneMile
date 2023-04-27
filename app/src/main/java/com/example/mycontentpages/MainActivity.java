@@ -6,10 +6,14 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.mycontentpages.Utils.DataContainer;
+import com.example.mycontentpages.Utils.OkHttp;
 import com.example.mycontentpages.account.Account_guestUser;
 import com.example.mycontentpages.favorites.Fragment_Favorites;
 import com.example.mycontentpages.home.Fragment_Home;
@@ -17,6 +21,9 @@ import com.example.mycontentpages.login.*;
 import com.example.mycontentpages.profile.Fragment_Profile_signed;
 import com.example.mycontentpages.search.Fragment_Search;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,9 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Fragment_Profile_signed bf4=new Fragment_Profile_signed();
 
     Account_guestUser gf=new Account_guestUser();
-
-
     //判断登录状态,i在哪里开始调用
+    public  static Thread initThread;
 
 
 
@@ -45,9 +51,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initThread = new Thread(()->{
+            try {
+                DataContainer.initialize();
+            } catch (IOException e) {
+                Log.i("initialize","initialize failed");
+            }
+        });
+        initThread.start();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.getBoolean("login_success", false)) {
             i = 1;
@@ -89,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void changeTab(int position) {
 
-//        Intent intent=new Intent(this, Account_guestUser.class);
+        Intent intent=new Intent(this, Account_guestUser.class);
 
         ivCurrent.setSelected(false);
 
