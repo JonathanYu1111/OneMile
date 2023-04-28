@@ -15,6 +15,7 @@ import okhttp3.ResponseBody;
 @Data
 public class DataContainer {
 
+    // TODO: 28/04/2023  需要初始化空arraylist，防止为空是没有初始值，程序终止
     private static List<Place> placeContainer;
 
    private static final OkHttpClient okHttpClient=new OkHttpClient();
