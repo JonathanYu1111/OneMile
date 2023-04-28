@@ -117,7 +117,7 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
         Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
         intent.putExtra("name", favoritePlace.get(position).getName());
         intent.putExtra("description", favoritePlace.get(position).getDescription());
-        intent.putExtra("picUrl", favoritePlace.get(position).getUrl());
+        intent.putExtra("picUrl", favoritePlace.get(position).getFirstPhoto());
 
         startActivity(intent);
     }

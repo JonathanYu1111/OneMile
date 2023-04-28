@@ -84,7 +84,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         place = (Place) bundle.getSerializable("attraction");
         //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
-        attPicsUrl.add(place.getUrl());
+        attPicsUrl.add(place.getFirstPhoto());
         TextView tv_description=findViewById(R.id.attr_info_description);
         TextView tv_name=findViewById(R.id.attr_info_name);
         tv_name.setText(place.getName());

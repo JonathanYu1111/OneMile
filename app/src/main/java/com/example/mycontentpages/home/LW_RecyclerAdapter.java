@@ -17,11 +17,11 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class LW_RecyclerAdapter extends RecyclerView.Adapter<LW_RecyclerAdapter.MyViewHolder> {
-    private List<Place> data;
+    private List<Place> places;
     private Context context;
 
-    public LW_RecyclerAdapter(List<Place> data, Context context) {
-        this.data = data;
+    public LW_RecyclerAdapter(List<Place> places, Context context) {
+        this.places = places;
         this.context = context;
     }
 
@@ -37,18 +37,18 @@ public class LW_RecyclerAdapter extends RecyclerView.Adapter<LW_RecyclerAdapter.
         if (position%2==1){
             holder.ll_left.setVisibility(View.GONE);
             holder.iv_left.setVisibility(View.GONE);
-            holder.tv_name_right.setText(data.get(position).getName());
-            holder.tv_description_right.setText(data.get(position).getDescription());
+            holder.tv_name_right.setText(places.get(position).getName());
+            holder.tv_description_right.setText(places.get(position).getDescription());
             Picasso.get()
-                    .load(data.get(position).getUrl())
+                    .load(places.get(position).getFirstPhoto())
                     .into(holder.iv_right);
         }else{
             holder.ll_right.setVisibility(View.GONE);
             holder.iv_right.setVisibility(View.GONE);
-            holder.tv_name_left.setText(data.get(position).getName());
-            holder.tv_description_left.setText(data.get(position).getDescription());
+            holder.tv_name_left.setText(places.get(position).getName());
+            holder.tv_description_left.setText(places.get(position).getDescription());
             Picasso.get()
-                    .load(data.get(position).getUrl())
+                    .load(places.get(position).getFirstPhoto())
                     .into(holder.iv_left);
         }
 
@@ -57,7 +57,7 @@ public class LW_RecyclerAdapter extends RecyclerView.Adapter<LW_RecyclerAdapter.
 
     @Override
     public int getItemCount() {
-        return data==null?0:data.size();
+        return places ==null?0: places.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

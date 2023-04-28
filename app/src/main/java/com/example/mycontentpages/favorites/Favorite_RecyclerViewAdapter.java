@@ -44,7 +44,7 @@ public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_
         holder.tv_name.setText(data.get(position).getName());
         holder.tv_description.setText(data.get(position).getDescription());
         Picasso.get()
-                .load(data.get(position).getUrl())
+                .load(data.get(position).getFirstPhoto())
                 .into(holder.tv_img);
     }
 

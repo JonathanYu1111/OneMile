@@ -49,6 +49,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MapsFragment extends Fragment {
     SupportMapFragment supportMapFragment;
@@ -63,8 +66,11 @@ public class MapsFragment extends Fragment {
     private static double myRealLat;
     private static double myRealLng;
 
-    private static  ArrayList<MarkerOptions> markerOptionList=new ArrayList<MarkerOptions>();
-    private static ArrayList<Marker> markers=new ArrayList<>();
+    private static  List<MarkerOptions> markerOptionList=new ArrayList<>();
+    private static List<Marker> markers=new ArrayList<>();
+    private static Map<Marker,MarkerOptions> MM=new HashMap<>();
+    private static Map<MarkerOptions, String> MO_ID=new HashMap<>(); //MarkerOptions and GooglePlaceID
+    private static List<String> InRangeIDs=new ArrayList<>();
     private   static GoogleMap thisMap;
     private   static Circle displayCircle;
     private static Double pointChangeIndex=0.003;
@@ -178,8 +184,11 @@ public class MapsFragment extends Fragment {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    //加载所有MarkerOption
                     for(Place place: DataContainer.getPlaceContainer()){
-                        markerOptionList.add(new MarkerOptions().position(new LatLng(place.getLatitude(), place.getLongitude())).title(place.getName()).snippet(place.getName()+"Snippet").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        MarkerOptions newMO=new MarkerOptions().position(new LatLng(place.getLatitude(), place.getLongitude())).title(place.getName()).snippet(place.getName()+"Snippet").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                        markerOptionList.add(newMO);
+                        MO_ID.put(newMO,place.getGooglePlaceId());
                     }
                     displayCircle= thisMap.addCircle(circleOptions);
                     //加载所有marker
@@ -187,6 +196,7 @@ public class MapsFragment extends Fragment {
                         Marker newMarker=thisMap.addMarker(mo);
                         newMarker.setVisible(false);
                         markers.add(newMarker);
+                        MM.put(newMarker,mo);
                     }
                     updateView();
 
@@ -274,13 +284,11 @@ public class MapsFragment extends Fragment {
                         }
                     });
 
-
-
                     thisMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
-
                             Toast.makeText(getActivity(),"经度:"+marker.getPosition().latitude+"\n纬度："+marker.getPosition().longitude,Toast.LENGTH_LONG).show();
+                            Log.i("ID","There are "+InRangeIDs.size()+" places in range");
                             return true;
                         }
                     });
@@ -292,7 +300,8 @@ public class MapsFragment extends Fragment {
         thisMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newestLatLng, thisMap.getCameraPosition().zoom));
         Log.i("Location", "Location changed");
         displayCircle.setCenter(newestLatLng);
-
+   //显示范围内的点
+           List<String> IDs=new ArrayList<>(); //to collect googleID in range
         for(Marker m:markers){
             Location location1=new Location("");
             Location location2=new Location("");
@@ -302,12 +311,19 @@ public class MapsFragment extends Fragment {
             location2.setLongitude(m.getPosition().longitude);
             if(location1.distanceTo(location2)<=VisualDistance){
                 m.setVisible(true);
+                String googleID_in_Range=MO_ID.get(MM.get(m));
+                IDs.add(googleID_in_Range);
             }else{
                 m.setVisible(false);
             }
-
         }
+        InRangeIDs=IDs;
     }
+
+    public static List<String> getInRangeIDs(){
+        return InRangeIDs;
+    }
+
 }
 
 

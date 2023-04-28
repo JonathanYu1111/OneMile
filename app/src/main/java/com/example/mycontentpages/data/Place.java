@@ -1,6 +1,15 @@
 package com.example.mycontentpages.data;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import lombok.Data;
 import lombok.Getter;
@@ -17,7 +26,6 @@ public class Place implements Serializable {
     private String googlePlaceId;
     private String name;
     private String type;
-
     private Double latitude;
 
     private Double longitude;
@@ -272,8 +280,29 @@ public Place(){
         return description;
     }
 
+
+    //不要用这个方法，因为返回的是未处理的后台数据，形如： [https://xxxxxxx,https://aaaaaa,https://bbbb,https://ccccc]
     public String getUrl() {
         return url;
+    }
+
+    public List<String> getUrlList(){
+        String pureUrl=this.url.substring(1,this.url.length()-1);
+        String[] arr=pureUrl.split(",");
+        List<String> urls= Arrays.asList(arr);
+        return urls;
+    }
+    public String getUrlWithIndex(int index){
+       String pureUrl=this.url.substring(1,this.url.length()-1);
+       String[] arr=pureUrl.split(",");
+        List<String> urls= Arrays.asList(arr);
+       return urls.get(index);
+    }
+    public String getFirstPhoto(){
+        String pureUrl=this.photos.substring(1,this.photos.length()-1);
+        String[] arr=pureUrl.split(",");
+        List<String> photos= Arrays.asList(arr);
+        return photos.get(0);
     }
 
     public String getWebsite() {

@@ -36,7 +36,7 @@ public class SR_RecyclerViewAdapter extends RecyclerView.Adapter<SR_RecyclerView
         holder.name_tv.setText(data.get(position).getName());
         holder.description_tv.setText(data.get(position).getDescription());
         Picasso.get()
-                .load(data.get(position).getUrl())
+                .load(data.get(position).getFirstPhoto())
                 .into(holder.img_tv);
     }
 
