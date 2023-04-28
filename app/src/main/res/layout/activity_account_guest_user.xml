@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:layout_marginVertical="30dp"
+            android:layout_marginVertical="10dp"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         android:id="@+id/signIn"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/btn_signin"
         android:drawableLeft="@drawable/baseline_person_24"
         android:drawablePadding="8dp"
@@ -81,7 +81,7 @@
         android:id="@+id/signUp"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/btn_signin"
         android:drawableLeft="@drawable/baseline_perm_identity_24"
         android:drawablePadding="8dp"

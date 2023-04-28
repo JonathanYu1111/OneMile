@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LoginActivity l = new LoginActivity();
 
-    int i=0;
+    int i=1;
 
     Fragment_Home bf1=new Fragment_Home();
     Fragment_Search bf2=new Fragment_Search();
