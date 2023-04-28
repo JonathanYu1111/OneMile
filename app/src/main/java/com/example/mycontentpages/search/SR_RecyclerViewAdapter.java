@@ -10,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.attractionInfo.Attraction;
+import com.example.mycontentpages.data.Place;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class SR_RecyclerViewAdapter extends RecyclerView.Adapter<SR_RecyclerViewAdapter.MyViewHolder>{
-    List<Attraction> data;
+    List<Place> data;
     Context context;
 
-    public SR_RecyclerViewAdapter(List<Attraction> data, Context context) {
+    public SR_RecyclerViewAdapter(List<Place> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -36,7 +36,7 @@ public class SR_RecyclerViewAdapter extends RecyclerView.Adapter<SR_RecyclerView
         holder.name_tv.setText(data.get(position).getName());
         holder.description_tv.setText(data.get(position).getDescription());
         Picasso.get()
-                .load(data.get(position).getPicURL())
+                .load(data.get(position).getUrl())
                 .into(holder.img_tv);
     }
 

@@ -4,10 +4,8 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.example.mycontentpages.data.Place;
-
 import java.io.IOException;
 import java.util.List;
-
 import lombok.Data;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,8 +32,8 @@ public class DataContainer {
 
 
             Request request = new Request.Builder()
-                    .url("http://172.20.10.3:8090/place/get")
-                   // .url("http://10.183.135.5:8090/place/get")
+                 //   .url("http://172.20.10.3:8090/place/get")
+                    .url("http://10.183.135.5:8090/place/get")
                     .build();
             Log.i("http","http1");
             // 3. 发送请求并接收响应

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mycontentpages.attractionInfo.Attraction;
+import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,10 +19,10 @@ import java.util.List;
 public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_RecyclerViewAdapter.MyViewHolder> {
 
     private final RecyclerViewInterface recyclerViewInterface;
-    private List<Attraction> data;
+    private List<Place> data;
     private Context context;
 
-    public Favorite_RecyclerViewAdapter(List<Attraction> data, Context context,RecyclerViewInterface recyclerViewInterface) {
+    public Favorite_RecyclerViewAdapter(List<Place> data, Context context, RecyclerViewInterface recyclerViewInterface) {
         this.data = data;
         this.context = context;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -44,7 +44,7 @@ public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_
         holder.tv_name.setText(data.get(position).getName());
         holder.tv_description.setText(data.get(position).getDescription());
         Picasso.get()
-                .load(data.get(position).getPicURL())
+                .load(data.get(position).getUrl())
                 .into(holder.tv_img);
     }
 

@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,18 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
 
-import com.example.mycontentpages.MainActivity;
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.attractionInfo.Attraction;
+import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
-import com.example.mycontentpages.home.Fragment_Home;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +31,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
 
     View rootView;
 
-    List<Attraction> searchResult=new ArrayList<>();
+    List<Place> searchResult=new ArrayList<>();
     private EditText mSearchEditText;
     private ImageView mSearchButton;
     private SharedPreferences preferences;
@@ -101,7 +93,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
                 }
             });
         }
-        List<Attraction> searchResult=new ArrayList<>();
+        List<Place> searchResult=new ArrayList<>();
         initView();
         return rootView;
     }
@@ -182,8 +174,8 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
                     +name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"
                     +name+"-"+name+"-"+name+"-"+name+"-"+name+"-" +name+"-"+name+"-"
                     +name+"-"+name+"-"+name+"-"+name;
-            Attraction attraction=new Attraction(picsURL.get(i),name,description);
-            searchResult.add(attraction);
+            Place place =new Place(picsURL.get(i),name,description);
+            searchResult.add(place);
         }
         RecyclerView recyclerView1=rootView.findViewById(R.id.sr_rv);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());

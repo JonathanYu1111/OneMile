@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.attractionInfo.Attraction;
+import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ListViewFragment extends Fragment {
     View rootView;
-    List<Attraction> attractionlist=new ArrayList<>();
+    List<Place> attractionlist=new ArrayList<>();
 
 
     @Override
@@ -75,8 +75,8 @@ public class ListViewFragment extends Fragment {
             String name="place"+i;
             String description="placeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee+" +i+
                     "\n+placeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-            Attraction attraction=new Attraction(picsURL.get(i),name,description);
-            attractionlist.add(attraction);
+            Place place =new Place(picsURL.get(i),name,description);
+            attractionlist.add(place);
         }
     }
 

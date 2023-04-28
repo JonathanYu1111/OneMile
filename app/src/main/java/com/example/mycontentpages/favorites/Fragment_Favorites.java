@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.attractionInfo.Attraction;
+import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
 import com.example.mycontentpages.home.Fragment_Home;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class Fragment_Favorites extends Fragment implements RecyclerViewInterface{
 
     View rootView;
-    List<Attraction> favoriteAttraction=new ArrayList<>();
+    List<Place> favoritePlace =new ArrayList<>();
 
 
     public Fragment_Favorites() {
@@ -65,8 +65,8 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
            RecyclerView recyclerView= rootView.findViewById(R.id.favorites_rv);
            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
            recyclerView.setLayoutManager(linearLayoutManager);
-           System.out.println("ceshi"+favoriteAttraction.size());//test
-           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoriteAttraction,getContext(),this);
+           System.out.println("ceshi"+ favoritePlace.size());//test
+           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoritePlace,getContext(),this);
            recyclerView.setAdapter(favorite_recyclerViewAdapter);
 
 //           favorite_recyclerViewAdapter.setOnItemClickListener(new Favorite_RecyclerViewAdapter.OnItemClickListener() {
@@ -107,17 +107,17 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
                     + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
                     + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
                     + name + "-" + name + "-" + name + "-" + name;
-            Attraction attraction = new Attraction(picsURL.get(i), name, description);
-            favoriteAttraction.add(attraction);
+            Place place = new Place(picsURL.get(i), name, description);
+            favoritePlace.add(place);
         }
     }
 
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-        intent.putExtra("name", favoriteAttraction.get(position).getName());
-        intent.putExtra("description", favoriteAttraction.get(position).getDescription());
-        intent.putExtra("picUrl", favoriteAttraction.get(position).getPicURL());
+        intent.putExtra("name", favoritePlace.get(position).getName());
+        intent.putExtra("description", favoritePlace.get(position).getDescription());
+        intent.putExtra("picUrl", favoritePlace.get(position).getUrl());
 
         startActivity(intent);
     }

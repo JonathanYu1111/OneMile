@@ -1,5 +1,7 @@
 package com.example.mycontentpages.data;
 
+import java.io.Serializable;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +9,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class Place {
+public class Place implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer placeId;
@@ -65,6 +67,17 @@ public class Place {
     private String phone;
 
     private String fullAddress;
+
+
+    //特别注意此无参构造器不可改动，否则无法完成json对象封装
+public Place(){
+//不可改动不可改动不可改动，重事说三
+}
+    public Place(String picURL, String name, String description) {
+        this.url=picURL;
+        this.name = name;
+        this.description=description;
+    }
 
 
     public void setPlaceId(Integer placeId) {

@@ -8,20 +8,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.attractionInfo.Attraction;
+import com.example.mycontentpages.data.Place;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class LW_RecyclerAdapter extends RecyclerView.Adapter<LW_RecyclerAdapter.MyViewHolder> {
-    private List<Attraction> data;
+    private List<Place> data;
     private Context context;
 
-    public LW_RecyclerAdapter(List<Attraction> data, Context context) {
+    public LW_RecyclerAdapter(List<Place> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -41,7 +40,7 @@ public class LW_RecyclerAdapter extends RecyclerView.Adapter<LW_RecyclerAdapter.
             holder.tv_name_right.setText(data.get(position).getName());
             holder.tv_description_right.setText(data.get(position).getDescription());
             Picasso.get()
-                    .load(data.get(position).getPicURL())
+                    .load(data.get(position).getUrl())
                     .into(holder.iv_right);
         }else{
             holder.ll_right.setVisibility(View.GONE);
@@ -49,7 +48,7 @@ public class LW_RecyclerAdapter extends RecyclerView.Adapter<LW_RecyclerAdapter.
             holder.tv_name_left.setText(data.get(position).getName());
             holder.tv_description_left.setText(data.get(position).getDescription());
             Picasso.get()
-                    .load(data.get(position).getPicURL())
+                    .load(data.get(position).getUrl())
                     .into(holder.iv_left);
         }
 

@@ -8,17 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.mycontentpages.R;
+import com.example.mycontentpages.data.Place;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +25,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     List<String> attPicsUrl=new ArrayList<>();
     List<String> commentList=new ArrayList<>();
     RecyclerView comment_rv;
-    Attraction attraction;
+    Place place;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +45,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
     private void initiateView() {
-        if(attraction!=null){
+        if(place !=null){
             getAndSetAttractionData();
         }
-        System.out.println(attraction);
+        System.out.println(place);
 
         ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
 
@@ -84,13 +82,13 @@ public class AttractionDetailsActivity extends AppCompatActivity {
 
     private void getAndSetAttractionData() {
         Bundle bundle = getIntent().getExtras();
-        attraction = (Attraction) bundle.getSerializable("attraction");
+        place = (Place) bundle.getSerializable("attraction");
         //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
-        attPicsUrl.add(attraction.getPicURL());
+        attPicsUrl.add(place.getUrl());
         TextView tv_description=findViewById(R.id.attr_info_description);
         TextView tv_name=findViewById(R.id.attr_info_name);
-        tv_name.setText(attraction.getName());
-        tv_description.setText(attraction.getDescription());
+        tv_name.setText(place.getName());
+        tv_description.setText(place.getDescription());
     }
 
     private void addComment() {
