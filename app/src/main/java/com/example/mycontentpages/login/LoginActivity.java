@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -76,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         String passWord = password.getText().toString();
         String success = "Sign in success!";
         String fail = "Incorrect username or password";
-        Intent intent = null;
 
 
 
@@ -88,32 +88,28 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject();
                 json.put("username", userName);
                 json.put("password", passWord);
-                String s = OkHttp.sendPostRequest("http://172.16.3.37:8060/member/loginVerification", String.valueOf(json));
+                String s = OkHttp.sendPostRequest("/member/loginVerification", String.valueOf(json));
 
                 JSONObject jsonObject = new JSONObject(s);
                 String token = jsonObject.getJSONObject("data").getString("token");
+                String code = jsonObject.getString("code");
+                String msg = jsonObject.getString("msg");
+                if (Integer.valueOf(code) != 20041){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(this,fail,Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
                 // store the token
                 SpUtils.putString(MainActivity.getContext(), "token", token);
 
-                //获取返回数据在页面上进行更新
-                runOnUiThread(()->{
-
-                });
+                Intent intent = null;
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }).start();
-
-        if (userName.equals("abc") && passWord.equals("abc")) {
-            Toast.makeText(this,success,Toast.LENGTH_LONG).show();
-            intent = new Intent(this, MainActivity.class);
-            intent.putExtra("login_success", true);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-            startActivity(intent);
-        }else{
-            Toast.makeText(this,fail,Toast.LENGTH_LONG).show();
-        }
    }
 
 

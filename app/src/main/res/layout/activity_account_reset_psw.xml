@@ -36,7 +36,7 @@
 
     <EditText
         android:layout_marginVertical="8dp"
-        android:id="@+id/editTextName"
+        android:id="@+id/npwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter new password"
@@ -60,7 +60,7 @@
     <EditText
         android:layout_marginVertical="8dp"
         android:inputType="textPassword"
-        android:id="@+id/editTextPassword"
+        android:id="@+id/cpwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Confirm new password"

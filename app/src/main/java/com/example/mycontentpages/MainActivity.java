@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     LoginActivity l = new LoginActivity();
 
-    int i=1;
+    int i=0;
 
     Fragment_Home bf1=new Fragment_Home();
     Fragment_Search bf2=new Fragment_Search();
@@ -74,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.getBoolean("login_success", false)) {
+
+        String token = SpUtils.getString(MainActivity.getContext(), "token");
+        if (token != ""){
             i = 1;
         }
 
