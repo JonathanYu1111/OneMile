@@ -28,6 +28,12 @@
             android:id="@+id/option_attraction"
             android:title="attraction"
             android:checkable="true"
+            android:checked="true"
+            android:actionLayout="@layout/filter_checkbox"/>
+        <item
+            android:id="@+id/option_all"
+            android:title="all"
+            android:checkable="true"
             android:actionLayout="@layout/filter_checkbox"/>
     </group>
 

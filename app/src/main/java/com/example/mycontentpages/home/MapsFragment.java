@@ -243,7 +243,6 @@ public class MapsFragment extends Fragment {
 
                                 }else{Toast.makeText(getActivity(),"Can not connect to GooglePlay service",Toast.LENGTH_LONG).show();}
                             }
-
                             if(testMode==true){
                                 testMode=false;
                                 testLat=myRealLat;
