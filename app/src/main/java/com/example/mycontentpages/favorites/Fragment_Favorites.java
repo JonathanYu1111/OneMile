@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mycontentpages.R;
+import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
 import com.example.mycontentpages.home.Fragment_Home;
@@ -27,6 +28,7 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
 
     View rootView;
     List<Place> favoritePlace =new ArrayList<>();
+    DataContainer dataContainer = new DataContainer();
 
 
     public Fragment_Favorites() {
@@ -49,43 +51,20 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_favorites, container, false);
         }
+
+        //将dataconainer中取得的数据导入
+        favoritePlace = dataContainer.getPlaceContainer();
         initView();
         return rootView;
     }
 
     private void initView() {
-        //添加测试数据
-        //添加测试数据
-        testData();
         RecyclerView recyclerView = rootView.findViewById(R.id.favorites_rv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         //System.out.println("ceshi" + favoriteAttraction.size());//test
         Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(favoritePlace, getContext(), this);
         recyclerView.setAdapter(favorite_recyclerViewAdapter);
-    }
-    public void testData(){
-        //test1: add data into favorites_rv
-        //final version: get those data from backend
-        List<String> picsURL=new ArrayList<>();//just for test data
-        for(int i=0;i<30;i++){
-            if(i%3==0){
-                picsURL.add("https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60");
-            }else if(i%3==1){
-                picsURL.add("https://images.unsplash.com/photo-1681312407157-19ec16888a6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
-            }else {
-                picsURL.add("https://images.unsplash.com/photo-1675111575738-80a06bbdb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
-            }
-        }
-        for(int i=0;i<20;i++) {
-            String name = "place" + i;
-            String description = name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
-                    + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
-                    + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-" + name + "-"
-                    + name + "-" + name + "-" + name + "-" + name;
-            Place place = new Place(picsURL.get(i), name, description);
-            favoritePlace.add(place);
-        }
     }
 
     @Override

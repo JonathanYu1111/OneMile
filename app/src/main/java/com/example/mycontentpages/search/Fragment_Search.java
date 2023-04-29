@@ -20,14 +20,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.mycontentpages.R;
+import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
+import com.example.mycontentpages.favorites.Favorite_RecyclerViewAdapter;
+import com.example.mycontentpages.favorites.RecyclerViewInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Fragment_Search extends Fragment implements View.OnClickListener{
+public class Fragment_Search extends Fragment implements View.OnClickListener, RecyclerViewInterface {
 
     View rootView;
 
@@ -39,6 +42,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
     private ListView mHistoryListView;
     private ArrayAdapter<String> mHistoryAdapter;
 
+    DataContainer dataContainer = new DataContainer();
 
     public Fragment_Search() {
         // Required empty public constructor
@@ -93,7 +97,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
                 }
             });
         }
-        List<Place> searchResult=new ArrayList<>();
+        searchResult=dataContainer.getPlaceContainer();
         initView();
         return rootView;
     }
@@ -122,12 +126,6 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
         }
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//
-//    }
 
     @Override
     public void onClick(View view) {
@@ -152,45 +150,23 @@ public class Fragment_Search extends Fragment implements View.OnClickListener{
     }
 
     private void initView() {
-        dataTest2();
-    }
-
-    private void dataTest2() {
-        //test2:add list data into search result
-        //in final version: get the data from backend
-        List<String> picsURL=new ArrayList<>();//just for test data
-        for(int i=0;i<30;i++){
-            if(i%3==0){
-                picsURL.add("https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60");
-            }else if(i%3==1){
-                picsURL.add("https://images.unsplash.com/photo-1681312407157-19ec16888a6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
-            }else {
-                picsURL.add("https://images.unsplash.com/photo-1675111575738-80a06bbdb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
-            }
-        }
-        for(int i=0;i<15;i++){
-            String name="place"+i;
-            String description=name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"
-                    +name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"+name+"-"
-                    +name+"-"+name+"-"+name+"-"+name+"-"+name+"-" +name+"-"+name+"-"
-                    +name+"-"+name+"-"+name+"-"+name;
-            Place place =new Place(picsURL.get(i),name,description);
-            searchResult.add(place);
-        }
         RecyclerView recyclerView1=rootView.findViewById(R.id.sr_rv);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView1.setLayoutManager(linearLayoutManager);
-        SR_RecyclerViewAdapter sr_recyclerViewAdapter = new SR_RecyclerViewAdapter(searchResult, getContext());
-        recyclerView1.setAdapter(sr_recyclerViewAdapter);
-
-        sr_recyclerViewAdapter.setmOnItemClickListener(new SR_RecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-                intent.putExtra("attraction", searchResult.get(position));
-                startActivity(intent);
-            }
-        });
+        //SR_RecyclerViewAdapter sr_recyclerViewAdapter = new SR_RecyclerViewAdapter(searchResult, getContext());
+        Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(searchResult,getContext(), this);
+        recyclerView1.setAdapter(favorite_recyclerViewAdapter);
     }
 
+
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
+        intent.putExtra("name", searchResult.get(position).getName());
+        intent.putExtra("description", searchResult.get(position).getDescription());
+        intent.putExtra("picUrl", searchResult.get(position).getFirstPhoto());
+
+        startActivity(intent);
+    }
 }
