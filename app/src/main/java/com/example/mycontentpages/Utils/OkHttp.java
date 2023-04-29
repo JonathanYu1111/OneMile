@@ -36,26 +36,6 @@ public class OkHttp {
         Log.e("body",s);
         List<Place> places = JSON.parseArray(s, Place.class);
        DataContainer.setPlaceContainer(places);
-
-//            Request request = new Request.Builder()
-//                   .url("http://172.20.10.30:8090/place/get")
-//                    //  .url("http://10.183.135.5:8090/place/get")
-//                    .build();
-//            Response response = okHttpClient.newCall(request).execute();
-//                Log.e("HTTP", "" + response.isSuccessful());
-//            if (response.isSuccessful()==false)
-//            {
-//                Request request2 = new Request.Builder()
-//                   //    .url("http://172.20.10.3:8090/place/get")
-//                    .url("http://10.183.135.5:8090/place/get")
-//                    .build();
-//             response=okHttpClient.newCall(request2).execute();
-//            }
-//                ResponseBody body = response.body();
-//                String jsonStr = body.string();
-//                Log.i("body", jsonStr);
-//                List<Place> places = JSON.parseArray(jsonStr, Place.class);
-//                placeContainer = places;
     }
 
 
