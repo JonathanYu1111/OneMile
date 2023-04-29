@@ -33,29 +33,31 @@ public class DataContainer {
 
 
             Request request = new Request.Builder()
-                 //   .url("http://172.20.10.3:8090/place/get")
+                  // .url("http://172.20.10.3:8090/place/get")
+                   .url("http://10.183.135.5:8090/place/get")
+                    .build();
+            Response response = okHttpClient.newCall(request).execute();
+
+            if (response.isSuccessful()==false)
+            { Request request2 = new Request.Builder()
+                   //    .url("http://172.20.10.3:8090/place/get")
                     .url("http://10.183.135.5:8090/place/get")
                     .build();
-            Log.i("http","http1");
-            // 3. 发送请求并接收响应
-            Response response = okHttpClient.newCall(request).execute();
-            Log.i("http","http2");
-            // 4. 处理响应数据
-            if (response.isSuccessful()) {
+             response=okHttpClient.newCall(request2).execute();
+            }
                 ResponseBody body = response.body();
                 String jsonStr = body.string();
-                Log.i("body",jsonStr);
+                Log.i("body", jsonStr);
                 List<Place> places = JSON.parseArray(jsonStr, Place.class);
-                placeContainer=places;
-                Log.i("DATA","places initialize successfully");
-            }else{
-                Log.i("DATA","places initialize failed");
-            }
+                placeContainer = places;
+
+
 
         }
         public static  List<Place> getPlaceContainer(){
             return placeContainer;
         }
+
 }
 
 

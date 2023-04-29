@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mycontentpages.R;
+import com.example.mycontentpages.Utils.BufferData;
 import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
@@ -80,7 +81,7 @@ public class ListViewFragment extends Fragment {
 //            places.add(place);
         List<Place> inRangePlaces=new ArrayList<>();
         for(Place place: DataContainer.getPlaceContainer()) {
-            for (String googleID : MapsFragment.getInRangeIDs()) {
+            for (String googleID : BufferData.getInRangeIDs()) {
                     if(place.getGooglePlaceId().equals(googleID)){
                         inRangePlaces.add(place);
                     }

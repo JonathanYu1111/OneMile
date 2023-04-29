@@ -43,21 +43,21 @@
         <activity
             android:name=".attractionInfo.AttractionDetailsActivity"
             android:exported="false" />
-        <activity
-            android:name=".account.Account_guestUser"
-            android:exported="false" />
-        <activity
-            android:name=".profile.Reset_psw"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".account.Account_guestUser"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".profile.Reset_psw"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".account.SignIn"
             android:exported="false" />
         <activity
             android:name=".account.SignUpActivity"
             android:exported="false" />
-        <activity
-            android:name=".search.Fragment_Search"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".search.Fragment_Search"-->
+<!--            android:exported="false" />-->
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 

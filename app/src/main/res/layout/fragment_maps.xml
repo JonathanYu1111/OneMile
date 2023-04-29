@@ -12,7 +12,6 @@
         android:id="@+id/switchButton"
         android:text="Switch Button"
         android:layout_margin="10dp"
-
         />
     <Button
         android:layout_width="wrap_content"
@@ -38,6 +37,12 @@
         android:id="@+id/downButton"
         android:layout_gravity="bottom|center"
         android:text="Down"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/filterButton"
+        android:layout_gravity="top|right"
+        android:text="filter"/>
 
 
 

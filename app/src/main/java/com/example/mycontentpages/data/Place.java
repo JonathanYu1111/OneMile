@@ -299,11 +299,13 @@ public Place(){
        return urls.get(index);
     }
     public String getFirstPhoto(){
-        String pureUrl=this.photos.substring(1,this.photos.length()-1);
-        String[] arr=pureUrl.split(",");
-        List<String> photos= Arrays.asList(arr);
-        return photos.get(0);
-    }
+//        String pureUrl=this.photos.substring(1,this.photos.length()-1);
+//        String[] arr=pureUrl.split(",");
+//        List<String> photos= Arrays.asList(arr);
+       // return photos.get(0);
+        return "https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60";
+    // return "https://lh5.googleusercontent.com/p/AF1QipPLzRQuTtrXh1f_iqZKBd6gixxa03jU4BOiPkDM=w1200-h1301-p-k-no-pi-20-ya180.88095-ro0-fo100";
+}
 
     public String getWebsite() {
         return website;

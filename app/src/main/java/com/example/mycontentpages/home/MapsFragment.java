@@ -5,6 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import android.app.Application;
+import android.content.ClipData;
 import android.content.Context;
 import android.Manifest;
 import android.content.Intent;
@@ -16,12 +19,16 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.mycontentpages.MainActivity;
+import com.example.mycontentpages.Utils.BufferData;
 import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.attractionInfo.AttractionDetailsActivity;
 import com.example.mycontentpages.R;
@@ -48,6 +55,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,13 +79,13 @@ public class MapsFragment extends Fragment {
     private static List<Marker> markers=new ArrayList<>();
     private static Map<Marker,MarkerOptions> MM=new HashMap<>();
     private static Map<MarkerOptions, String> MO_ID=new HashMap<>(); //MarkerOptions and GooglePlaceID
-    private static List<String> InRangeIDs=new ArrayList<>();
     private   static GoogleMap thisMap;
     private   static Circle displayCircle;
     private static Double pointChangeIndex=0.003;
 
     private static Integer VisualDistance=1000;
     private static boolean testMode= true;
+
 
     /////////////////////////////////////////////////////////////
     View rootView;
@@ -151,7 +160,6 @@ public class MapsFragment extends Fragment {
             mapFragment.getMapAsync(callback);
         }
     }
-
 
 
     public void mapStart(){
@@ -250,11 +258,36 @@ public class MapsFragment extends Fragment {
                         }
                     });
 
-                    Button button_up,button_left,button_right,button_down;
+                    Button button_up,button_left,button_right,button_down,button_filter;
                     button_up=getActivity().findViewById(R.id.upButton);
                     button_left=getActivity().findViewById(R.id.leftButton);
                     button_right=getActivity().findViewById(R.id.rightButton);
                     button_down=getActivity().findViewById(R.id.downButton);
+                    button_filter = getActivity().findViewById(R.id.filterButton);
+                    button_filter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                            popupMenu.getMenuInflater().inflate(R.menu.filter_menu2, popupMenu.getMenu());
+                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                                @Override
+                                public boolean onMenuItemClick(MenuItem menuItem) {
+                                    // 处理菜单项的点击事件
+                                   // menuItem.setChecked(!menuItem.isChecked());
+                                    if(menuItem.getTitle()!=""){
+                                    BufferData.setSelectedPlaceType(""+menuItem.getTitle());}
+                                    else{ BufferData.setSelectedPlaceType("");}
+                                    updateView();
+                                    Log.i("menu",""+menuItem.getTitle());
+                                    /////
+                                    return true;
+                                }
+                            });
+                            popupMenu.show();
+                        }
+                    });
+
                     button_up.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -288,12 +321,14 @@ public class MapsFragment extends Fragment {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
                             Toast.makeText(getActivity(),"经度:"+marker.getPosition().latitude+"\n纬度："+marker.getPosition().longitude,Toast.LENGTH_LONG).show();
-                            Log.i("ID","There are "+InRangeIDs.size()+" places in range");
+                            Log.i("ID","There are "+BufferData.getInRangeIDs().size()+" places in range");
                             return true;
                         }
                     });
                 }}
         });}
+
+
     public void updateView(){
         LatLng newestLatLng = new LatLng(testLat, testLng);
         myLocationMarker.setPosition(newestLatLng);
@@ -309,7 +344,14 @@ public class MapsFragment extends Fragment {
             location1.setLongitude(testLng);
             location2.setLatitude(m.getPosition().latitude);
             location2.setLongitude(m.getPosition().longitude);
-            if(location1.distanceTo(location2)<=VisualDistance){
+   //TODO: to modify the below part
+            String markerPlaceType="";
+            for(Place place:DataContainer.getPlaceContainer()){
+               if(place.getGooglePlaceId().equals(MO_ID.get (MM.get(m))))
+               { markerPlaceType=place.getType();}
+             }
+
+            if(location1.distanceTo(location2)<=VisualDistance&& markerPlaceType.contains(BufferData.getSelectedPlaceType())){
                 m.setVisible(true);
                 String googleID_in_Range=MO_ID.get(MM.get(m));
                 IDs.add(googleID_in_Range);
@@ -317,13 +359,8 @@ public class MapsFragment extends Fragment {
                 m.setVisible(false);
             }
         }
-        InRangeIDs=IDs;
+        BufferData.setInRangeIDs(IDs);
     }
-
-    public static List<String> getInRangeIDs(){
-        return InRangeIDs;
-    }
-
 }
 
 

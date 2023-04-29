@@ -1,0 +1,34 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Sort by categories"
+        android:enabled="false" />
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/option_park"
+            android:title="park"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
+        <item
+            android:id="@+id/option_library"
+            android:title="library"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
+        <item
+            android:id="@+id/option_museum"
+            android:title="museum"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
+        <item
+            android:id="@+id/option_gallery"
+            android:title="gallery"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
+        <item
+            android:id="@+id/option_attraction"
+            android:title="attraction"
+            android:checkable="true"
+            android:actionLayout="@layout/filter_checkbox"/>
+    </group>
+
+</menu>
