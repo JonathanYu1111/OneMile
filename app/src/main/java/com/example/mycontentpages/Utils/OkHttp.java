@@ -12,13 +12,15 @@ import okhttp3.Response;
 
 public class OkHttp {
 
+    public static final String Base_url = "http://10.58.212.5:8090";
+
     public static String sendGetRequest(String url) throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HandlerUtils())
                 .build();
 
         Request request = new Request.Builder()
-                .url(url)
+                .url(Base_url + url)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -35,7 +37,7 @@ public class OkHttp {
                 .build();
 
         Request request = new Request.Builder()
-                .url(url)
+                .url(Base_url + url)
                 .post(requestBody)
                 .build();
 
