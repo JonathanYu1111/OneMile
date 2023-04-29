@@ -31,6 +31,12 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attraction_info_layout);
 
+        String name =getIntent().getStringExtra("name");
+
+        TextView nameTextView = findViewById(R.id.attr_info_name);
+
+        nameTextView.setText(name);
+
         initiateView();
 
         // 获取 ActionBar 对象
@@ -50,28 +56,28 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         }
         System.out.println(place);
 
-        ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
-
-        //test1:add random data into url list,
-        //the data should be provided from back end.
-//        attPicsUrl.add("http://e.hiphotos.baidu.com/image/pic/item/a1ec08fa513d2697e542494057fbb2fb4316d81e.jpg");
-        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-        AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
-        attr_info_vp.setAdapter(adapter);
-
-        //test2:add data into comment list
-        //the data should be provided from back end.
-        for (int i=0;i<25;i++){
-            String comment="user"+i+":"+"comment content"+i;
-            commentList.add(comment);
-        }
-        comment_rv= findViewById(R.id.attr_info_comment_rv);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        comment_rv.setLayoutManager(linearLayoutManager);
-        AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
-        comment_rv.setAdapter(ai_C_recyclerViewAdapter);
+//        ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
+//
+//        //test1:add random data into url list,
+//        //the data should be provided from back end.
+////        attPicsUrl.add("http://e.hiphotos.baidu.com/image/pic/item/a1ec08fa513d2697e542494057fbb2fb4316d81e.jpg");
+//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+//        AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
+//        attr_info_vp.setAdapter(adapter);
+//
+//        //test2:add data into comment list
+//        //the data should be provided from back end.
+//        for (int i=0;i<25;i++){
+//            String comment="user"+i+":"+"comment content"+i;
+//            commentList.add(comment);
+//        }
+//        comment_rv= findViewById(R.id.attr_info_comment_rv);
+//        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+//        comment_rv.setLayoutManager(linearLayoutManager);
+//        AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
+//        comment_rv.setAdapter(ai_C_recyclerViewAdapter);
 
         showReadMore();
         showOpenTime();

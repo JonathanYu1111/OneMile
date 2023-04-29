@@ -39,14 +39,8 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
 
         super.onCreate(savedInstanceState);
 
-//        RecyclerView recyclerView = rootView.findViewById(R.id.favorites_rv);
-//        setUpAttractions();
-
     }
 
-    private void setUpAttractions() {
-        testData();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,32 +55,14 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
 
     private void initView() {
         //添加测试数据
+        //添加测试数据
         testData();
-           RecyclerView recyclerView= rootView.findViewById(R.id.favorites_rv);
-           LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
-           recyclerView.setLayoutManager(linearLayoutManager);
-           System.out.println("ceshi"+ favoritePlace.size());//test
-           Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter=new Favorite_RecyclerViewAdapter(favoritePlace,getContext(),this);
-           recyclerView.setAdapter(favorite_recyclerViewAdapter);
-
-//           favorite_recyclerViewAdapter.setOnItemClickListener(new Favorite_RecyclerViewAdapter.OnItemClickListener() {
-//               @Override
-//               public void onItemClick(int position) {
-//                   Bundle bundle = new Bundle();
-//                   Attraction attraction=favoriteAttraction.get(position);
-//                   bundle.putSerializable("attraction",attraction);
-//                   Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-//                   //intent.putExtra("attraction", favoriteAttraction.get(position));
-//                   intent.putExtra("name", favoriteAttraction.get(position).getName());
-//                   intent.putExtra("description", favoriteAttraction.get(position).getDescription());
-//                   intent.putExtra("picUrl", favoriteAttraction.get(position).getPicURL());
-//                   intent.putExtras(bundle);
-//                   startActivity(intent);
-//
-//               }
-//           });
-//
-
+        RecyclerView recyclerView = rootView.findViewById(R.id.favorites_rv);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //System.out.println("ceshi" + favoriteAttraction.size());//test
+        Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(favoritePlace, getContext(), this);
+        recyclerView.setAdapter(favorite_recyclerViewAdapter);
     }
     public void testData(){
         //test1: add data into favorites_rv

@@ -33,14 +33,6 @@
             android:textSize="34sp"
             android:textStyle="bold"
             tools:ignore="TextSizeCheck" />
-        <Button
-            android:id="@+id/skip"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:text="skip"
-            android:textSize="8dp"
-            android:textColor="@color/black"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
