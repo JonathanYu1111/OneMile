@@ -57,6 +57,9 @@ public class DataContainer {
         public static  List<Place> getPlaceContainer(){
             return placeContainer;
         }
+        public static void setPlaceContainer(List<Place> places){
+            placeContainer =places;
+        }
 
 }
 
