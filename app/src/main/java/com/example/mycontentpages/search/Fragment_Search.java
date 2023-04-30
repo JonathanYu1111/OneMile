@@ -27,12 +27,14 @@ import com.example.mycontentpages.favorites.Favorite_RecyclerViewAdapter;
 import com.example.mycontentpages.favorites.RecyclerViewInterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class Fragment_Search extends Fragment implements View.OnClickListener, RecyclerViewInterface {
 
     View rootView;
+    Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter;
 
     List<Place> searchResult=new ArrayList<>();
     private EditText mSearchEditText;
@@ -50,9 +52,11 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
 
 
 
+
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+       String searchContentAll;
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_search, container, false);
             mSearchEditText = rootView.findViewById(R.id.editText_Search);
@@ -62,6 +66,10 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
 
             preferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
             reload();
+
+
+
+
 
             // setup history list view
             String[] historyArray = getHistory();
@@ -74,6 +82,8 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
                 mSearchEditText.setText(searchContent);
                 mHistoryListView.setVisibility(View.GONE);
             });
+
+
 
             // setup search box text change listener
             mSearchEditText.addTextChangedListener(new TextWatcher() {
@@ -94,13 +104,18 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
                 }
                 @Override
                 public void afterTextChanged(Editable s) {
+                    filter(s.toString());
                 }
             });
         }
-        searchResult=dataContainer.getPlaceContainer();
+
+        searchResult = dataContainer.getPlaceContainer();
+
         initView();
         return rootView;
     }
+
+
 
     private String[] getHistory() {
         String historyString = preferences.getString("history", "");
@@ -153,8 +168,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
         RecyclerView recyclerView1=rootView.findViewById(R.id.sr_rv);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView1.setLayoutManager(linearLayoutManager);
-        //SR_RecyclerViewAdapter sr_recyclerViewAdapter = new SR_RecyclerViewAdapter(searchResult, getContext());
-        Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(searchResult,getContext(), this);
+        favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(searchResult,getContext(), this);
         recyclerView1.setAdapter(favorite_recyclerViewAdapter);
     }
 
@@ -168,5 +182,15 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
         intent.putExtra("picUrl", searchResult.get(position).getFirstPhoto());
 
         startActivity(intent);
+    }
+
+    private void filter(String text){
+        ArrayList<Place> filteredList = new ArrayList<>();
+        for(Place item: dataContainer.getPlaceContainer()){
+            if(item.getName().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }
+            favorite_recyclerViewAdapter.filterList(filteredList);
+        }
     }
 }

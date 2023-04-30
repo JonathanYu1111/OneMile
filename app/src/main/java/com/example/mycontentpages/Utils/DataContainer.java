@@ -33,8 +33,10 @@ public class DataContainer {
 
 
             Request request = new Request.Builder()
-                   .url("http://172.20.10.3:8090/place/get")
+                   //.url("http://10.58.229.178:8090/place/get")
                     //  .url("http://10.183.135.5:8090/place/get")
+
+                    .url("http://10.58.193.11:8090/place/get")
                     .build();
             Response response = okHttpClient.newCall(request).execute();
 
