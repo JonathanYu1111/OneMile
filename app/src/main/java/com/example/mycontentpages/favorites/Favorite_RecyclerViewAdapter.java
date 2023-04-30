@@ -14,6 +14,7 @@ import com.example.mycontentpages.data.Place;
 import com.example.mycontentpages.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_RecyclerViewAdapter.MyViewHolder> {
@@ -53,6 +54,11 @@ public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_
         return data == null ? 0 : data.size();
     }
 
+    public void filterList(ArrayList<Place> filteredList) {
+        data = filteredList;
+        notifyDataSetChanged();
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_name;
         private TextView tv_description;
@@ -86,5 +92,9 @@ public class Favorite_RecyclerViewAdapter extends RecyclerView.Adapter<Favorite_
         public interface OnItemClickListener {
             void onItemClick(int position);
         }
+    }
+
+    public List<Place> getData() {
+        return data;
     }
 }

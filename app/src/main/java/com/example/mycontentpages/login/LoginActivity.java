@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     //用于判断登录状态
-    public int flag = 0;
+    public int flag = 1;
 
 
 

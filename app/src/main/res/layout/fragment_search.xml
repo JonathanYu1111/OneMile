@@ -35,6 +35,8 @@
                     android:background="@drawable/edit_box_background"
                     android:hint="Search for your destination"
                     android:textColorHint="#9B9B9B"
+                    android:maxLines="1"
+                    android:maxLength="80"
                     android:paddingStart="16dp"
                     android:paddingEnd="70dp"
                     android:paddingTop="10dp"
