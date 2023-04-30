@@ -24,7 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mycontentpages.MainActivity;
@@ -74,7 +76,6 @@ public class MapsFragment extends Fragment {
     private static double testLng=defaultLng;
     private static double myRealLat;
     private static double myRealLng;
-
     private static  List<MarkerOptions> markerOptionList=new ArrayList<>();
     private static List<Marker> markers=new ArrayList<>();
     private static Map<Marker,MarkerOptions> MM=new HashMap<>();
@@ -163,7 +164,7 @@ public class MapsFragment extends Fragment {
 
 
     public void mapStart(){
-
+        modifyInfoWindow(thisMap);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -194,7 +195,7 @@ public class MapsFragment extends Fragment {
                     }
                     //加载所有MarkerOption
                     for(Place place: DataContainer.getPlaceContainer()){
-                        MarkerOptions newMO=new MarkerOptions().position(new LatLng(place.getLatitude(), place.getLongitude())).title(place.getName()).snippet(place.getName()+"Snippet").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                        MarkerOptions newMO=new MarkerOptions().position(new LatLng(place.getLatitude(), place.getLongitude())).title(place.getName()).snippet("Click to learn more").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                         markerOptionList.add(newMO);
                         MO_ID.put(newMO,place.getGooglePlaceId());
                     }
@@ -225,12 +226,10 @@ public class MapsFragment extends Fragment {
                                     testLng=location.getLongitude();
                                     updateView();
                                 }
-
                             }
                         };
                         locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 3000, 0, locationListener);
                     }
-
                     Button switchButton=getActivity().findViewById(R.id.switchButton);
                     switchButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -269,12 +268,11 @@ public class MapsFragment extends Fragment {
                             PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                             popupMenu.getMenuInflater().inflate(R.menu.filter_menu2, popupMenu.getMenu());
                             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
                                 @Override
                                 public boolean onMenuItemClick(MenuItem menuItem) {
                                     // 处理菜单项的点击事件
                                    // menuItem.setChecked(!menuItem.isChecked());
-                                    if(menuItem.getTitle()!=""){
+                                    if(!menuItem.getTitle().equals("all")){
                                     BufferData.setSelectedPlaceType(""+menuItem.getTitle());}
                                     else{ BufferData.setSelectedPlaceType("");}
                                     updateView();
@@ -316,14 +314,28 @@ public class MapsFragment extends Fragment {
                         }
                     });
 
-                    thisMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+
+//                    thisMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//                        @Override
+//                        public boolean onMarkerClick(Marker marker) {
+//                            Toast.makeText(getActivity(),"经度:"+marker.getPosition().latitude+"\n纬度："+marker.getPosition().longitude,Toast.LENGTH_LONG).show();
+//                            Log.i("ID","There are "+BufferData.getInRangeIDs().size()+" places in range");
+//                                return true;
+//                            }
+//                    });
+                    thisMap.setOnMarkerClickListener(new OnMarkerDoubleClickListener() {
+
                         @Override
-                        public boolean onMarkerClick(Marker marker) {
-                            Toast.makeText(getActivity(),"经度:"+marker.getPosition().latitude+"\n纬度："+marker.getPosition().longitude,Toast.LENGTH_LONG).show();
-                            Log.i("ID","There are "+BufferData.getInRangeIDs().size()+" places in range");
-                            return true;
+                        public void onMarkerDoubleClick(Marker marker) {
+                            marker.showInfoWindow();
                         }
                     });
+
+
+
+
+
                 }}
         });}
 
@@ -360,6 +372,77 @@ public class MapsFragment extends Fragment {
         }
         BufferData.setInRangeIDs(IDs);
     }
+
+
+    public abstract class OnMarkerDoubleClickListener implements GoogleMap.OnMarkerClickListener {
+        private static final long DOUBLE_CLICK_TIME_DELTA = 300; // 双击时间间隔，单位：毫秒
+        private long lastClickTime = 0;
+
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            long clickTime = System.currentTimeMillis();
+            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                onMarkerDoubleClick(marker);
+            }
+            lastClickTime = clickTime;
+            Toast.makeText(getActivity(),"one click",Toast.LENGTH_LONG).show();
+            marker.showInfoWindow();
+            return true;
+        }
+
+        public abstract void onMarkerDoubleClick(Marker marker);
+    }
+
+
+    //the popup window of marker
+    public void modifyInfoWindow(GoogleMap googleMap){
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(@NonNull Marker marker) {
+                Log.i("window","window click");
+                Toast.makeText(getActivity(),"window click",Toast.LENGTH_LONG).show();
+            }
+        });
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Nullable
+            @Override
+            public View getInfoContents(@NonNull Marker marker) {
+                View view = getLayoutInflater().inflate(R.layout.marker_infowindow, null);
+
+                // 设置自定义视图的属性
+                TextView titleTextView = view.findViewById(R.id.window_title);
+                TextView snippetTextView=view.findViewById(R.id.window_snippet);
+                titleTextView.setText(marker.getTitle());
+                snippetTextView.setText(marker.getSnippet());
+                return view;
+            }
+
+            @Override
+            public View getInfoWindow(Marker marker) {
+
+//                View view = getLayoutInflater().inflate(R.layout.marker_infowindow, null);
+//
+//                // 设置自定义视图的属性
+//                TextView titleTextView = view.findViewById(R.id.window_title);
+//                TextView snippetTextView=view.findViewById(R.id.window_snippet);
+//                Button windowButton=view.findViewById(R.id.window_button);
+//
+//                titleTextView.setText(marker.getTitle());
+//                snippetTextView.setText(marker.getSnippet());
+//
+//                windowButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Log.i("window","window click");
+//                        Toast.makeText(getActivity(),"window click",Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//                return view;
+                return null;
+            }});
+    }
+
 }
 
 
