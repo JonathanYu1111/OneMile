@@ -1,5 +1,7 @@
 package com.example.mycontentpages.Utils;
 
+import static com.example.mycontentpages.Utils.OkHttp.initPlaces;
+
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -21,41 +23,15 @@ public class DataContainer {
    private static final OkHttpClient okHttpClient=new OkHttpClient();
         public static void initialize() throws IOException {
             Log.i("DATA","data initializing");
-            initPlaces();
+
+        initPlaces();
 
         }
 
-        public static void initPlaces() throws IOException {
-//            String s = OkHttp.sendGetRequest("http://172.20.10.3:8090/place/get");
-//            Log.e("body",s);
-//            List<Place> places = JSON.parseArray(s, Place.class);
-//            placeContainer=places;
-
-
-            Request request = new Request.Builder()
-                   //.url("http://10.58.229.178:8090/place/get")
-                    //  .url("http://10.183.135.5:8090/place/get")
-
-                    .url("http://10.58.193.11:8090/place/get")
-                    .build();
-            Response response = okHttpClient.newCall(request).execute();
-
-            if (response.isSuccessful()==false)
-            { Request request2 = new Request.Builder()
-                   //    .url("http://172.20.10.3:8090/place/get")
-                    .url("http://10.183.135.5:8090/place/get")
-                    .build();
-             response=okHttpClient.newCall(request2).execute();
-            }
-                ResponseBody body = response.body();
-                String jsonStr = body.string();
-                Log.i("body", jsonStr);
-                List<Place> places = JSON.parseArray(jsonStr, Place.class);
-                placeContainer = places;
 
 
 
-        }
+
         public static  List<Place> getPlaceContainer(){
             return placeContainer;
         }
