@@ -18,11 +18,4 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="what_do_you_think_of_this_place">what do you think of this place?</string>
 
-    <string-array name="attraction_collection">
-        <item>place0</item>
-        <item>place1</item>
-        <item>place2</item>
-        <item>place4</item>
-    </string-array>
-
 </resources>

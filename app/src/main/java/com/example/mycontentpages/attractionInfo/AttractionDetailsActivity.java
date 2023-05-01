@@ -10,16 +10,23 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mycontentpages.MainActivity;
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.Utils.DataContainer;
+import com.example.mycontentpages.Utils.OkHttp;
+import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.data.Place;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -28,6 +35,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.mycontentpages.Utils.DataContainer;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +44,14 @@ import java.util.List;
 public class AttractionDetailsActivity extends AppCompatActivity {
     List<String> attPicsUrl=new ArrayList<>();
     List<String> commentList=new ArrayList<>();
+
+    private ImageView collectionButton;
+    int collectionFlag = 0;
     RecyclerView comment_rv;
+
+    String token;
+
+    String placeID;
     Place place;
 
     private GoogleMap theMap;
@@ -45,12 +61,19 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attraction_info_layout);
-        String placeID =getIntent().getStringExtra("placeID");
+
+         placeID =getIntent().getStringExtra("placeID");
         place= DataContainer.getIDandPlace().get(placeID);
          String name =place.getName();
           //String name =getIntent().getStringExtra("name");
+
+        collectionButton = findViewById(R.id.collectionButton);
+
         TextView nameTextView = findViewById(R.id.attr_info_name);
         nameTextView.setText(name);
+
+        token = SpUtils.getString(MainActivity.getContext(), "token");
+
         initiateView();
         // 获取 ActionBar 对象
         ActionBar actionBar = getSupportActionBar();
@@ -76,6 +99,34 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void getCollectStatus() {
+
+        //send request
+        new Thread(()->{
+            try {
+                //send json data convert to json
+                JSONObject json = new JSONObject();
+                json.put("place_id", placeID);
+                String s = OkHttp.sendPostRequest("/collect/info", String.valueOf(json));
+                JSONObject jsonObject = new JSONObject(s);
+                Integer status = Integer.parseInt(jsonObject.getString("data"));
+                String code = jsonObject.getString("code");
+                if (Integer.valueOf(code) != 20041){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(this, "Sorry, can not get the collection status",Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
+                collectionFlag = status;
+                intentCollectionState(collectionButton);
+
+            } catch (Exception e) {
+                Log.e("one", e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
+
     private void initiateView() {
         if(place !=null){
             getAndSetAttractionData();
@@ -90,6 +141,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
         AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
         attr_info_vp.setAdapter(adapter);
+
+        if (token != ""){
+            getCollectStatus();
+        }
 
         //test2:add data into comment list
         //the data should be provided from back end.
@@ -110,6 +165,8 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
     private void getAndSetAttractionData() {
+        Bundle bundle = getIntent().getExtras();
+        place = (Place) bundle.getSerializable("attraction");
         //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
         attPicsUrl.add(place.getFirstPhoto());
         TextView tv_description=findViewById(R.id.attr_info_description);
@@ -213,5 +270,43 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
 
+    public void intentCollectionState(View view){
+        ImageView imageView = (ImageView) view;
+        if (collectionFlag == 0) {
+            imageView.setImageResource(R.drawable.favorites_normal);
+
+        } else {
+            imageView.setImageResource(R.drawable.favorites_pressed);
+        }
+    }
+    public void pressCollectionButton(View view){
+
+        new Thread(()->{
+            try {
+                //send json data convert to json
+                JSONObject json = new JSONObject();
+                json.put("place_id", placeID);
+                json.put("status", collectionFlag);
+                String s = OkHttp.sendPostRequest("/collect/change", String.valueOf(json));
+                JSONObject jsonObject = new JSONObject(s);
+                Integer status = Integer.parseInt(jsonObject.getString("data"));
+                String code = jsonObject.getString("code");
+                if (Integer.valueOf(code) != 20031){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(this, "Sorry, can not change the collection status",Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
+                collectionFlag = status;
+                intentCollectionState(collectionButton);
+
+
+            } catch (Exception e) {
+                Log.e("one", "6666");
+                Log.e("one", e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
 
 }

@@ -2,6 +2,7 @@ package com.example.mycontentpages.favorites;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class Fragment_Favorites extends Fragment implements RecyclerViewInterfac
         intent.putExtra("name", favoritePlace.get(position).getName());
         intent.putExtra("description", favoritePlace.get(position).getDescription());
         intent.putExtra("picUrl", favoritePlace.get(position).getFirstPhoto());
+        intent.putExtra("placeID",favoritePlace.get(position).getGooglePlaceId());
 
         startActivity(intent);
     }

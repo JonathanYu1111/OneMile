@@ -108,10 +108,13 @@
                     android:textColor="@color/black"/>
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:id="@+id/collectionButton"
+                    android:contentDescription="collextion"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/favorites_normal" />
+                    android:src="@drawable/favorites_normal"
+                    android:onClick="pressCollectionButton"/>
 
             </LinearLayout>
 
