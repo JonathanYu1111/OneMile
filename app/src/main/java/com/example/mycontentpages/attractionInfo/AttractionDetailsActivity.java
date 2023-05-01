@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.example.mycontentpages.Utils.OkHttp;
 import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.data.Place;
 
+import com.example.mycontentpages.login.LoginActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -50,6 +53,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     RecyclerView comment_rv;
 
     String token;
+    float mRating;
 
     String placeID;
     Place place;
@@ -175,29 +179,78 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
     private void addComment() {
-        Button addComment_btn=findViewById(R.id.attr_info_addComment_btn);
+        Button addComment_btn = findViewById(R.id.attr_info_addComment_btn);
         addComment_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View dialogView=getLayoutInflater().inflate(R.layout.attraction_info_addcomment_pop,null);
+                if (token != "") {
+                    View dialogView = getLayoutInflater().inflate(R.layout.attraction_info_addcomment_pop, null);
 
-                AlertDialog.Builder builder=new AlertDialog.Builder(AttractionDetailsActivity.this);
-                builder.setView(dialogView)
-                        .setPositiveButton("commit", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        })
-                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        })
-                        .create()
-                        .show();
+                    RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+                    EditText commentBox = dialogView.findViewById(R.id.comment);
+
+                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                        @Override
+                        public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                            mRating = rating;
+                        }
+                    });
+                    Log.e("one",mRating+"");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AttractionDetailsActivity.this);
+                    builder.setView(dialogView)
+                            .setPositiveButton("commit", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    String comment = commentBox.getText().toString();
+
+                                    //send request
+                                    new Thread(() -> {
+                                        try {
+                                            //send json data convert to json
+                                            JSONObject json = new JSONObject();
+                                            json.put("star", mRating);
+                                            Log.e("two",mRating+"");
+                                            json.put("content", comment);
+                                            json.put("place_id", placeID);
+                                            String s = OkHttp.sendPostRequest("/review/add", String.valueOf(json));
+
+                                            JSONObject jsonObject = new JSONObject(s);
+                                            String res = jsonObject.getString("data");
+                                            String code = jsonObject.getString("code");
+                                            String msg = jsonObject.getString("msg");
+                                            if (Integer.valueOf(code) != 20011) {
+                                                Looper.prepare(); // 创建一个 Looper 对象
+                                                Toast.makeText(getApplicationContext(), "save error", Toast.LENGTH_LONG).show();
+                                                Looper.loop(); // 开始消息循环
+                                                return;
+                                            }
+
+                                        } catch (Exception e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }).start();
+
+                                }
+                            })
+                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .create()
+                            .show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+
+                }
             }
         });
     }
+
 
     private void showComment() {
         ImageView attnInfo_show_comments = findViewById(R.id.attnInfo_show_comments);

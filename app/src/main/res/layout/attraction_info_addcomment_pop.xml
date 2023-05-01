@@ -15,6 +15,7 @@
         android:fontFamily="@font/aclonica"
         android:text="@string/what_do_you_think_of_this_place"/>
     <RatingBar
+        android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -24,6 +25,7 @@
         android:stepSize="0.5"
         android:contentDescription="rate the place"/>
     <EditText
+        android:id="@+id/comment"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="100dp"
