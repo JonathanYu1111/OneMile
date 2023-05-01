@@ -58,12 +58,11 @@
         app:layout_constraintTop_toBottomOf="@id/user_profile" />
 
 
-    <Button
+    <android.widget.Button
         android:id="@+id/signIn"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_signin"
         android:drawableLeft="@drawable/baseline_person_24"
         android:drawablePadding="8dp"
         android:fontFamily="@font/josefin_sans_semibold"
@@ -71,13 +70,14 @@
         android:text="Sign in"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:background="@drawable/btn_backgroundtest"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text1" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/signUp"
         android:layout_width="166dp"
         android:layout_height="wrap_content"

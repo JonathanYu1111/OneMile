@@ -317,4 +317,36 @@ public Place(){
     public String getFullAddress() {
         return fullAddress;
     }
+
+    @Override
+    public String toString() {
+        return "Place{" +
+                "googlePlaceId='" + googlePlaceId + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", streetNumber='" + streetNumber + '\'' +
+                ", route='" + route + '\'' +
+                ", locality='" + locality + '\'' +
+                ", administrativeAreaLevel2='" + administrativeAreaLevel2 + '\'' +
+                ", administrativeAreaLevel1='" + administrativeAreaLevel1 + '\'' +
+                ", country='" + country + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", openingHours='" + openingHours + '\'' +
+                ", photos='" + photos + '\'' +
+                ", rating=" + rating +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
+                ", icon='" + icon + '\'' +
+                ", googleRating=" + googleRating +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", website='" + website + '\'' +
+                ", openTime='" + openTime + '\'' +
+                ", closeTime='" + closeTime + '\'' +
+                ", phone='" + phone + '\'' +
+                ", fullAddress='" + fullAddress + '\'' +
+                '}';
+    }
 }

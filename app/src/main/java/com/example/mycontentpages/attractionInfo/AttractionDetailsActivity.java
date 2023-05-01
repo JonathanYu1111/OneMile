@@ -8,16 +8,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mycontentpages.MainActivity;
 import com.example.mycontentpages.R;
-import com.example.mycontentpages.Utils.DataContainer;
+import com.example.mycontentpages.Utils.OkHttp;
+import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.data.Place;
+import com.example.mycontentpages.Utils.DataContainer;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +34,23 @@ import java.util.List;
 public class AttractionDetailsActivity extends AppCompatActivity {
     List<String> attPicsUrl=new ArrayList<>();
     List<String> commentList=new ArrayList<>();
+
+    private ImageView collectionButton;
+    int collectionFlag = 0;
     RecyclerView comment_rv;
+
+    String placeID;
     Place place;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attraction_info_layout);
-        String placeID =getIntent().getStringExtra("placeID");
-        place= DataContainer.getIDandPlace().get(placeID);
-         String name =place.getName();
-          //String name =getIntent().getStringExtra("name");
+
+        collectionButton = findViewById(R.id.collectionButton);
+
+
+        String name =getIntent().getStringExtra("name");
+        placeID = getIntent().getStringExtra("placeID");
 
         TextView nameTextView = findViewById(R.id.attr_info_name);
 
@@ -53,34 +69,41 @@ public class AttractionDetailsActivity extends AppCompatActivity {
 
     }
 
+    private void getCollectStatus() {
+
+        //send request
+        new Thread(()->{
+            try {
+                //send json data convert to json
+                JSONObject json = new JSONObject();
+                json.put("place_id", placeID);
+                String s = OkHttp.sendPostRequest("/collect/info", String.valueOf(json));
+                JSONObject jsonObject = new JSONObject(s);
+                Integer status = Integer.parseInt(jsonObject.getString("data"));
+                String code = jsonObject.getString("code");
+                if (Integer.valueOf(code) != 20041){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(this, "Sorry, can not get the collection status",Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
+                collectionFlag = status;
+                intentCollectionState(collectionButton);
+
+            } catch (Exception e) {
+                Log.e("one", e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
+
     private void initiateView() {
         if(place !=null){
             getAndSetAttractionData();
         }
         System.out.println(place);
 
-//        ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
-//
-//        //test1:add random data into url list,
-//        //the data should be provided from back end.
-////        attPicsUrl.add("http://e.hiphotos.baidu.com/image/pic/item/a1ec08fa513d2697e542494057fbb2fb4316d81e.jpg");
-//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-//        AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
-//        attr_info_vp.setAdapter(adapter);
-//
-//        //test2:add data into comment list
-//        //the data should be provided from back end.
-//        for (int i=0;i<25;i++){
-//            String comment="user"+i+":"+"comment content"+i;
-//            commentList.add(comment);
-//        }
-//        comment_rv= findViewById(R.id.attr_info_comment_rv);
-//        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-//        comment_rv.setLayoutManager(linearLayoutManager);
-//        AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
-//        comment_rv.setAdapter(ai_C_recyclerViewAdapter);
+        getCollectStatus();
 
         showReadMore();
         showOpenTime();
@@ -90,6 +113,8 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
     private void getAndSetAttractionData() {
+        Bundle bundle = getIntent().getExtras();
+        place = (Place) bundle.getSerializable("attraction");
         //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
         attPicsUrl.add(place.getFirstPhoto());
         TextView tv_description=findViewById(R.id.attr_info_description);
@@ -196,5 +221,44 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         }
     }
 
+
+    public void intentCollectionState(View view){
+        ImageView imageView = (ImageView) view;
+        if (collectionFlag == 0) {
+            imageView.setImageResource(R.drawable.favorites_normal);
+
+        } else {
+            imageView.setImageResource(R.drawable.favorites_pressed);
+        }
+    }
+    public void pressCollectionButton(View view){
+
+        new Thread(()->{
+            try {
+                //send json data convert to json
+                JSONObject json = new JSONObject();
+                json.put("place_id", placeID);
+                json.put("status", collectionFlag);
+                String s = OkHttp.sendPostRequest("/collect/change", String.valueOf(json));
+                JSONObject jsonObject = new JSONObject(s);
+                Integer status = Integer.parseInt(jsonObject.getString("data"));
+                String code = jsonObject.getString("code");
+                if (Integer.valueOf(code) != 20031){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(this, "Sorry, can not change the collection status",Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
+                collectionFlag = status;
+                intentCollectionState(collectionButton);
+
+
+            } catch (Exception e) {
+                Log.e("one", "6666");
+                Log.e("one", e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
 
 }
