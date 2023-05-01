@@ -3,10 +3,12 @@ package com.example.mycontentpages.attractionInfo;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,6 +20,14 @@ import android.widget.TextView;
 import com.example.mycontentpages.R;
 import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.data.Place;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +37,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     List<String> commentList=new ArrayList<>();
     RecyclerView comment_rv;
     Place place;
+
+    private GoogleMap theMap;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,22 +49,31 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         place= DataContainer.getIDandPlace().get(placeID);
          String name =place.getName();
           //String name =getIntent().getStringExtra("name");
-
         TextView nameTextView = findViewById(R.id.attr_info_name);
-
         nameTextView.setText(name);
-
         initiateView();
-
         // 获取 ActionBar 对象
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // 在 ActionBar 上显示返回按钮
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        MapFragment mapFragment = MapFragment.newInstance();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.map_small, mapFragment);
+        transaction.commit();
 
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap map) {
+                theMap=map;
+                LatLng placeLatLng=new LatLng(place.getLatitude(),place.getLongitude());
+                theMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 15));
+                MarkerOptions markerOptions=new MarkerOptions().position(placeLatLng).title(place.getName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                Marker marker =theMap.addMarker(markerOptions);
 
-
+            }
+        });
     }
 
     private void initiateView() {
@@ -59,29 +82,26 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         }
         System.out.println(place);
 
-//        ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
-//
-//        //test1:add random data into url list,
-//        //the data should be provided from back end.
-////        attPicsUrl.add("http://e.hiphotos.baidu.com/image/pic/item/a1ec08fa513d2697e542494057fbb2fb4316d81e.jpg");
-//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-//        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-//        AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
-//        attr_info_vp.setAdapter(adapter);
-//
-//        //test2:add data into comment list
-//        //the data should be provided from back end.
-//        for (int i=0;i<25;i++){
-//            String comment="user"+i+":"+"comment content"+i;
-//            commentList.add(comment);
-//        }
-//        comment_rv= findViewById(R.id.attr_info_comment_rv);
-//        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-//        comment_rv.setLayoutManager(linearLayoutManager);
-//        AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
-//        comment_rv.setAdapter(ai_C_recyclerViewAdapter);
+        ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
+        //test1:add random data into url list,
+        //the data should be provided from back end.
+        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+        AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
+        attr_info_vp.setAdapter(adapter);
 
+        //test2:add data into comment list
+        //the data should be provided from back end.
+        for (int i=0;i<25;i++){
+            String comment="user"+i+":"+"comment content"+i;
+            commentList.add(comment);
+        }
+        comment_rv= findViewById(R.id.attr_info_comment_rv);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        comment_rv.setLayoutManager(linearLayoutManager);
+        AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
+        comment_rv.setAdapter(ai_C_recyclerViewAdapter);
         showReadMore();
         showOpenTime();
         showComment();
@@ -93,9 +113,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
         attPicsUrl.add(place.getFirstPhoto());
         TextView tv_description=findViewById(R.id.attr_info_description);
+        tv_description.setText(place.getFullAddress());
         TextView tv_name=findViewById(R.id.attr_info_name);
         tv_name.setText(place.getName());
-        tv_description.setText(place.getDescription());
+
     }
 
     private void addComment() {
@@ -110,20 +131,15 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                         .setPositiveButton("commit", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
                             }
                         })
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
                             }
                         })
                         .create()
                         .show();
-
-
-
             }
         });
     }
@@ -195,6 +211,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 
 }

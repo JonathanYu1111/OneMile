@@ -76,6 +76,7 @@ public class MapsFragment extends Fragment {
     private static double testLng=defaultLng;
     private static double myRealLat;
     private static double myRealLng;
+    private static PopupMenu popupMenu;
     private static  List<MarkerOptions> markerOptionList=new ArrayList<>();
     private static List<Marker> markers=new ArrayList<>();
     private static Map<Marker,MarkerOptions> MM=new HashMap<>();
@@ -86,21 +87,14 @@ public class MapsFragment extends Fragment {
 
     private static Integer VisualDistance=1000;
     private static boolean testMode= true;
+    private static String TITLE_CURRENT_POSITION="Your Are Here :)";
 
 
     /////////////////////////////////////////////////////////////
     View rootView;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
 
@@ -159,6 +153,7 @@ public class MapsFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+
     }
 
 
@@ -178,7 +173,7 @@ public class MapsFragment extends Fragment {
 
                     //加载初始位置：测试位置
                     LatLng defaultLatLng=new LatLng(defaultLat,defaultLng);
-                    MarkerOptions marker_myLocation=new MarkerOptions().position(defaultLatLng).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    MarkerOptions marker_myLocation=new MarkerOptions().position(defaultLatLng).title(TITLE_CURRENT_POSITION).snippet(""+testLat+","+testLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     myLocationMarker = thisMap.addMarker(marker_myLocation);
                     CircleOptions circleOptions = new CircleOptions()
                             .center(defaultLatLng)
@@ -264,13 +259,14 @@ public class MapsFragment extends Fragment {
                     button_filter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                            if(popupMenu==null){
+                             popupMenu = new PopupMenu(getActivity(), view);
                             popupMenu.getMenuInflater().inflate(R.menu.filter_menu2, popupMenu.getMenu());
                             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                                 @Override
                                 public boolean onMenuItemClick(MenuItem menuItem) {
                                     // 处理菜单项的点击事件
-                                   // menuItem.setChecked(!menuItem.isChecked());
+                                    menuItem.setChecked(!menuItem.isChecked());
                                     if(!menuItem.getTitle().equals("all")){
                                     BufferData.setSelectedPlaceType(""+menuItem.getTitle());}
                                     else{ BufferData.setSelectedPlaceType("");}
@@ -279,7 +275,7 @@ public class MapsFragment extends Fragment {
                                     /////
                                     return true;
                                 }
-                            });
+                            });}
                             popupMenu.show();
                         }
                     });
@@ -312,16 +308,7 @@ public class MapsFragment extends Fragment {
                             updateView();
                         }
                     });
-//                    thisMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//                        @Override
-//                        public boolean onMarkerClick(Marker marker) {
-//                            Toast.makeText(getActivity(),"经度:"+marker.getPosition().latitude+"\n纬度："+marker.getPosition().longitude,Toast.LENGTH_LONG).show();
-//                            Log.i("ID","There are "+BufferData.getInRangeIDs().size()+" places in range");
-//                                return true;
-//                            }
-//                    });
                     thisMap.setOnMarkerClickListener(new OnMarkerDoubleClickListener() {
-
                         @Override
                         public void onMarkerDoubleClick(Marker marker) {
                             marker.showInfoWindow();
@@ -374,7 +361,6 @@ public class MapsFragment extends Fragment {
                 onMarkerDoubleClick(marker);
             }
             lastClickTime = clickTime;
-            Toast.makeText(getActivity(),"one click",Toast.LENGTH_LONG).show();
             marker.showInfoWindow();
             return true;
         }
@@ -389,12 +375,10 @@ public class MapsFragment extends Fragment {
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(@NonNull Marker marker) {
-                Log.i("window","window click");
-                Toast.makeText(getActivity(),"window click",Toast.LENGTH_LONG).show();
+                if(!marker.getTitle().equals(TITLE_CURRENT_POSITION)){
                 Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
                 intent.putExtra("placeID", MO_ID.get(MM.get(marker)));
-                Log.i("intent",MO_ID.get(MM.get(marker)));
-                startActivity(intent);
+                startActivity(intent);}
             }
         });
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {

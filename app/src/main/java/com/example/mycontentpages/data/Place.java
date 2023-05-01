@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import lombok.Data;
 import lombok.Getter;
@@ -294,8 +295,22 @@ public Place(){
 //        String[] arr=pureUrl.split(",");
 //        List<String> photos= Arrays.asList(arr);
        // return photos.get(0);
-        return "https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60";
-    // return "https://lh5.googleusercontent.com/p/AF1QipPLzRQuTtrXh1f_iqZKBd6gixxa03jU4BOiPkDM=w1200-h1301-p-k-no-pi-20-ya180.88095-ro0-fo100";
+         String theUrl="url is blank";
+         ArrayList<String> urls=new ArrayList<>();
+       urls.add("https://images.unsplash.com/photo-1681312407157-19ec16888a6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
+        urls.add("https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60");
+       urls.add( "https://images.unsplash.com/photo-1675111575738-80a06bbdb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
+        Random rand = new Random();
+        int random = rand.nextInt(3);
+        switch (random){
+            case 0: theUrl=urls.get(0);
+                    break;
+            case 1:theUrl=urls.get(1);
+                    break;
+            case 2:theUrl=urls.get(2);
+                    break;
+        }
+        return theUrl;
 }
 
     public String getWebsite() {
