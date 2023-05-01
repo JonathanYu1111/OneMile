@@ -39,6 +39,8 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     int collectionFlag = 0;
     RecyclerView comment_rv;
 
+    String token;
+
     String placeID;
     Place place;
     @Override
@@ -55,6 +57,8 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         TextView nameTextView = findViewById(R.id.attr_info_name);
 
         nameTextView.setText(name);
+
+        token = SpUtils.getString(MainActivity.getContext(), "token");
 
         initiateView();
 
@@ -103,7 +107,9 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         }
         System.out.println(place);
 
-        getCollectStatus();
+        if (token != ""){
+            getCollectStatus();
+        }
 
         showReadMore();
         showOpenTime();
