@@ -80,7 +80,7 @@ public class MapsFragment extends Fragment {
     private static List<Marker> markers=new ArrayList<>();
     private static Map<Marker,MarkerOptions> MM=new HashMap<>();
     private static Map<MarkerOptions, String> MO_ID=new HashMap<>(); //MarkerOptions and GooglePlaceID
-    private   static GoogleMap thisMap;
+    private  static GoogleMap thisMap;
     private   static Circle displayCircle;
     private static Double pointChangeIndex=0.003;
 
@@ -120,7 +120,6 @@ public class MapsFragment extends Fragment {
                                 Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_LONG);
                             }
                         }
-
                         @Override
                         public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
                             while (true) {
@@ -313,9 +312,6 @@ public class MapsFragment extends Fragment {
                             updateView();
                         }
                     });
-
-
-
 //                    thisMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 //                        @Override
 //                        public boolean onMarkerClick(Marker marker) {
@@ -331,15 +327,8 @@ public class MapsFragment extends Fragment {
                             marker.showInfoWindow();
                         }
                     });
-
-
-
-
-
                 }}
         });}
-
-
     public void updateView(){
         LatLng newestLatLng = new LatLng(testLat, testLng);
         myLocationMarker.setPosition(newestLatLng);
@@ -402,6 +391,10 @@ public class MapsFragment extends Fragment {
             public void onInfoWindowClick(@NonNull Marker marker) {
                 Log.i("window","window click");
                 Toast.makeText(getActivity(),"window click",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
+                intent.putExtra("placeID", MO_ID.get(MM.get(marker)));
+                Log.i("intent",MO_ID.get(MM.get(marker)));
+                startActivity(intent);
             }
         });
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {

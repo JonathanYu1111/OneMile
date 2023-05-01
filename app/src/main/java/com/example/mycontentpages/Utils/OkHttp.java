@@ -7,7 +7,9 @@ import com.alibaba.fastjson.JSON;
 import com.example.mycontentpages.data.Place;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -16,7 +18,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OkHttp {
-    public static final String Base_url = "http://172.20.10.3:8090";
+  //  public static final String Base_url = "http://172.20.10.3:8090";
+    public static final String Base_url = "http://10.183.135.5:8090";
     public static String sendGetRequest(String url) throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HandlerUtils())
@@ -36,6 +39,11 @@ public class OkHttp {
         Log.e("body",s);
         List<Place> places = JSON.parseArray(s, Place.class);
        DataContainer.setPlaceContainer(places);
+       Map<String,Place> idAndPlace=new HashMap<>();
+       for(Place place:places){
+           idAndPlace.put(place.getGooglePlaceId(),place);
+       }
+       DataContainer.setIDandPlace(idAndPlace);
     }
 
 

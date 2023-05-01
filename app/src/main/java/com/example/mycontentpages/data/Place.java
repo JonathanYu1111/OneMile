@@ -21,8 +21,6 @@ import lombok.Setter;
 public class Place implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer placeId;
-
     private String googlePlaceId;
     private String name;
     private String type;
@@ -88,9 +86,6 @@ public Place(){
     }
 
 
-    public void setPlaceId(Integer placeId) {
-        this.placeId = placeId;
-    }
 
     public void setGooglePlaceId(String googlePlaceId) {
         this.googlePlaceId = googlePlaceId;
@@ -194,10 +189,6 @@ public Place(){
 
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
-    }
-
-    public Integer getPlaceId() {
-        return placeId;
     }
 
     public String getGooglePlaceId() {

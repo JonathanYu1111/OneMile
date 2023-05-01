@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mycontentpages.R;
+import com.example.mycontentpages.Utils.DataContainer;
 import com.example.mycontentpages.data.Place;
 
 import java.util.ArrayList;
@@ -30,8 +31,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attraction_info_layout);
-
-        String name =getIntent().getStringExtra("name");
+        String placeID =getIntent().getStringExtra("placeID");
+        place= DataContainer.getIDandPlace().get(placeID);
+         String name =place.getName();
+          //String name =getIntent().getStringExtra("name");
 
         TextView nameTextView = findViewById(R.id.attr_info_name);
 
@@ -87,8 +90,6 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     }
 
     private void getAndSetAttractionData() {
-        Bundle bundle = getIntent().getExtras();
-        place = (Place) bundle.getSerializable("attraction");
         //attraction=(Attraction) getIntent().getSerializableExtra("attraction");
         attPicsUrl.add(place.getFirstPhoto());
         TextView tv_description=findViewById(R.id.attr_info_description);

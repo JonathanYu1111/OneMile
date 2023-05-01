@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class ListViewFragment extends Fragment {
             @Override
             public void onImageClick(int position) {
                 Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-                intent.putExtra("attraction", places.get(position));
+                intent.putExtra("placeID", places.get(position).getGooglePlaceId());
                 startActivity(intent);
             }
         });

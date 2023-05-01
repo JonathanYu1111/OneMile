@@ -36,7 +36,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
     View rootView;
     Favorite_RecyclerViewAdapter favorite_recyclerViewAdapter;
 
-    List<Place> searchResult=new ArrayList<>();
+    List<Place> searchResu=new ArrayList<>();
     private EditText mSearchEditText;
     private ImageView mSearchButton;
     private SharedPreferences preferences;
@@ -109,7 +109,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
             });
         }
 
-        searchResult = dataContainer.getPlaceContainer();
+        searchResu = dataContainer.getPlaceContainer();
 
         initView();
         return rootView;
@@ -168,7 +168,7 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
         RecyclerView recyclerView1=rootView.findViewById(R.id.sr_rv);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView1.setLayoutManager(linearLayoutManager);
-        favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(searchResult,getContext(), this);
+        favorite_recyclerViewAdapter = new Favorite_RecyclerViewAdapter(searchResu,getContext(), this);
         recyclerView1.setAdapter(favorite_recyclerViewAdapter);
     }
 
@@ -177,10 +177,11 @@ public class Fragment_Search extends Fragment implements View.OnClickListener, R
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), AttractionDetailsActivity.class);
-        intent.putExtra("name", searchResult.get(position).getName());
-        intent.putExtra("description", searchResult.get(position).getDescription());
-        intent.putExtra("picUrl", searchResult.get(position).getFirstPhoto());
-
+        Place thisPlace =searchResu.get(position);
+        intent.putExtra("placeID",thisPlace.getGooglePlaceId());
+        intent.putExtra("name", thisPlace.getName());
+        intent.putExtra("description", thisPlace.getDescription());
+        intent.putExtra("picUrl", thisPlace.getFirstPhoto());
         startActivity(intent);
     }
 
