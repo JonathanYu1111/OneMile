@@ -16,7 +16,6 @@ import com.example.mycontentpages.login.*;
 import com.example.mycontentpages.profile.Fragment_Profile_signed;
 import com.example.mycontentpages.search.Fragment_Search;
 import java.io.IOException;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 

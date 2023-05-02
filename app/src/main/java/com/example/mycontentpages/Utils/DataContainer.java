@@ -45,6 +45,15 @@ public class DataContainer {
     public static void setIDandPlace(Map<String, Place> idAndPlace) {
         DataContainer.idAndPlace = idAndPlace;
     }
+
+    public static Place getByName(String placeName){
+            for(Place place: placeContainer){
+                if(placeName.equals(place.getName())){
+                return place;}
+            }
+            return null;
+    }
+
 }
 
 

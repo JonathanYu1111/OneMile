@@ -69,14 +69,17 @@ public class MapsFragment extends Fragment {
     FusedLocationProviderClient fusedLocationProviderClient;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private Marker myLocationMarker;
+    private static Marker myLocationMarker;
     private static double defaultLat=54.969697+0.02;
     private static double defaultLng=-1.624609+0.02;
     private  static double testLat=defaultLat;
     private static double testLng=defaultLng;
     private static double myRealLat;
     private static double myRealLng;
-    private static PopupMenu popupMenu;
+    public static PopupMenu popupMenu;
+    private static Button button_up,button_left,button_right,button_down,button_filter;
+    private static String switchModelA="FREE Model";
+    private static String switchModelB="FIXED Model";
     private static  List<MarkerOptions> markerOptionList=new ArrayList<>();
     private static List<Marker> markers=new ArrayList<>();
     private static Map<Marker,MarkerOptions> MM=new HashMap<>();
@@ -228,6 +231,7 @@ public class MapsFragment extends Fragment {
                     switchButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            changeButtonVisible(testMode);
                             int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity());
                             if (status != ConnectionResult.SUCCESS) {
                                 if (GoogleApiAvailability.getInstance().isUserResolvableError(status)) {
@@ -247,38 +251,47 @@ public class MapsFragment extends Fragment {
                                 testLng=defaultLng;
                                 updateView();
                                 Log.i("switchButton","switch to test mode");}
+                            String currentText = switchButton .getText().toString();
+                            // 判断当前文本是否为 "Text 1"，如果是则切换为 "Text 2"，否则切换为 "Text 1"
+                            if (currentText.equals(switchModelA)) {
+                                switchButton.setText(switchModelB);
+                            } else {
+                                switchButton.setText(switchModelA);
+                            }
                         }
+
                     });
 
-                    Button button_up,button_left,button_right,button_down,button_filter;
+
                     button_up=getActivity().findViewById(R.id.upButton);
                     button_left=getActivity().findViewById(R.id.leftButton);
                     button_right=getActivity().findViewById(R.id.rightButton);
                     button_down=getActivity().findViewById(R.id.downButton);
-                    button_filter = getActivity().findViewById(R.id.filterButton);
-                    button_filter.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(popupMenu==null){
-                             popupMenu = new PopupMenu(getActivity(), view);
-                            popupMenu.getMenuInflater().inflate(R.menu.filter_menu2, popupMenu.getMenu());
-                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem menuItem) {
-                                    // 处理菜单项的点击事件
-                                    menuItem.setChecked(!menuItem.isChecked());
-                                    if(!menuItem.getTitle().equals("all")){
-                                    BufferData.setSelectedPlaceType(""+menuItem.getTitle());}
-                                    else{ BufferData.setSelectedPlaceType("");}
-                                    updateView();
-                                    Log.i("menu",""+menuItem.getTitle());
-                                    /////
-                                    return true;
-                                }
-                            });}
-                            popupMenu.show();
-                        }
-                    });
+//                    button_filter = getActivity().findViewById(R.id.filterButton);
+//                    button_filter.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            if(popupMenu==null)
+//                             popupMenu = new PopupMenu(getActivity(), view);
+//                            popupMenu.getMenuInflater().inflate(R.menu.filter_menu2, popupMenu.getMenu());
+//                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                                @Override
+//                                public boolean onMenuItemClick(MenuItem menuItem) {
+//                                    // 处理菜单项的点击事件
+//                                   // menuItem.setChecked(!menuItem.isChecked());
+//                                    menuItem.setChecked(!menuItem.isChecked());
+//                                    if(!menuItem.getTitle().equals("all")){
+//                                    BufferData.setSelectedPlaceType(""+menuItem.getTitle());}
+//                                    else{ BufferData.setSelectedPlaceType("");}
+//                                    updateView();
+//                                    Log.i("menu",""+menuItem.getTitle());
+//                                    /////
+//                                    return true;
+//                                }
+//                            });
+//                            popupMenu.show();
+//                        }
+//                    });
 
                     button_up.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -316,7 +329,7 @@ public class MapsFragment extends Fragment {
                     });
                 }}
         });}
-    public void updateView(){
+    public static void updateView(){
         LatLng newestLatLng = new LatLng(testLat, testLng);
         myLocationMarker.setPosition(newestLatLng);
         thisMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newestLatLng, thisMap.getCameraPosition().zoom));
@@ -347,6 +360,21 @@ public class MapsFragment extends Fragment {
             }
         }
         BufferData.setInRangeIDs(IDs);
+    }
+
+    public void changeButtonVisible(Boolean tf){
+        if(!tf) {
+            button_up.setVisibility(View.VISIBLE);
+            button_left.setVisibility(View.VISIBLE);
+            button_right.setVisibility(View.VISIBLE);
+            button_down.setVisibility(View.VISIBLE);
+        }else{
+            button_up.setVisibility(View.GONE);
+            button_left.setVisibility(View.GONE);
+            button_right.setVisibility(View.GONE);
+            button_down.setVisibility(View.GONE);
+        }
+
     }
 
 

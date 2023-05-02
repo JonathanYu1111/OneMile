@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/switchButton"
-        android:text="Switch Button"
+        android:text="FREE Model"
         android:layout_margin="10dp"
         android:background="@drawable/btn_backgroundtest"
         />
@@ -18,39 +18,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/upButton"
-        android:text="UP"
+        android:text=""
         android:layout_gravity="top|center"
-        android:background="@drawable/btn_backgroundtest"
+        android:background="@drawable/baseline_keyboard_arrow_up_30"
         />
     <android.widget.Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/leftButton"
-        android:text="Left"
+        android:text=""
         android:layout_gravity="left|center"
-        android:background="@drawable/btn_backgroundtest"/>
+        android:background="@drawable/baseline_chevron_left_30"/>
     <android.widget.Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rightButton"
-        android:text="Right"
+        android:text=""
         android:layout_gravity="right|center"
-        android:background="@drawable/btn_backgroundtest"/>
+        android:background="@drawable/baseline_chevron_right_30"/>
     <android.widget.Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/downButton"
         android:layout_gravity="bottom|center"
-        android:text="Down"
-        android:background="@drawable/btn_backgroundtest"/>
-    <android.widget.Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/filterButton"
-        android:layout_gravity="top|right"
-        android:background="@drawable/btn_backgroundtest"
-        android:text="filter"
-        />
+        android:text=""
+        android:background="@drawable/baseline_keyboard_arrow_down_30"/>
+<!--    <android.widget.Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/filterButton"-->
+<!--        android:layout_gravity="top|right"-->
+<!--        android:background="@drawable/btn_backgroundtest"-->
+<!--        android:text="filter"-->
+<!--        />-->
 
 
     <TextView

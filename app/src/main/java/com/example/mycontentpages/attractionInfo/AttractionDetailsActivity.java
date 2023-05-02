@@ -1,13 +1,10 @@
 package com.example.mycontentpages.attractionInfo;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,13 +19,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mycontentpages.MainActivity;
 import com.example.mycontentpages.R;
 import com.example.mycontentpages.Utils.OkHttp;
 import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.data.Place;
-
 import com.example.mycontentpages.login.LoginActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +37,10 @@ import com.example.mycontentpages.Utils.DataContainer;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class AttractionDetailsActivity extends AppCompatActivity {
     List<String> attPicsUrl=new ArrayList<>();
@@ -51,7 +49,9 @@ public class AttractionDetailsActivity extends AppCompatActivity {
     private ImageView collectionButton;
     int collectionFlag = 0;
     RecyclerView comment_rv;
-
+    ImageView RecImg1,RecImg2,RecImg3;
+    TextView RecText1,RecText2,RecText3;
+    List<ImageView> RecImgs=new ArrayList();
     String token;
     float mRating;
 
@@ -85,6 +85,39 @@ public class AttractionDetailsActivity extends AppCompatActivity {
             // 在 ActionBar 上显示返回按钮
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+//随机推荐三个地方
+        RecImg1=findViewById(R.id.attractionImg1);
+        RecText1=findViewById(R.id.attraction1);
+        RecImg2=findViewById(R.id.attractionImg2);
+        RecText2=findViewById(R.id.attraction2);
+        RecImg3=findViewById(R.id.attractionImg3);
+        RecText3=findViewById(R.id.attraction3);
+        RecImgs.add(RecImg1);
+        RecImgs.add(RecImg2);
+        RecImgs.add(RecImg3);
+        Map<ImageView,TextView> recMap=new HashMap<>();
+        recMap.put(RecImg1,RecText1);
+        recMap.put(RecImg2,RecText2);
+        recMap.put(RecImg3,RecText3);
+        for(ImageView recimg:recMap.keySet()){
+            Random ran=new Random();
+            int ranNum=ran.nextInt(DataContainer.getPlaceContainer().size());
+            recMap.get(recimg).setText(DataContainer.getPlaceContainer().get(ranNum).getName());
+            //TO DO: set Pic Url when url available
+        }
+        for(ImageView img:RecImgs){
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), AttractionDetailsActivity.class);
+                    intent.putExtra("placeID", DataContainer.getByName(""+recMap.get(v).getText()).getGooglePlaceId());
+                    startActivity(intent);
+                }
+            });
+        }
+
+
+
         MapFragment mapFragment = MapFragment.newInstance();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.map_small, mapFragment);
@@ -140,9 +173,9 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         ViewPager2 attr_info_vp = findViewById(R.id.attr_info_vp);
         //test1:add random data into url list,
         //the data should be provided from back end.
-        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
-        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80");
+        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80//");
+        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80//");
+        attPicsUrl.add("https://images.unsplash.com/photo-1681649803940-462ad5e90abf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2274&q=80//");
         AI_P_Adapter adapter = new AI_P_Adapter(this, attPicsUrl);
         attr_info_vp.setAdapter(adapter);
 
@@ -226,12 +259,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                                                 Looper.loop(); // 开始消息循环
                                                 return;
                                             }
-
                                         } catch (Exception e) {
                                             throw new RuntimeException(e);
                                         }
                                     }).start();
-
                                 }
                             })
                             .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -260,10 +291,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(comment_rv.getVisibility()==View.GONE){
                     comment_rv.setVisibility(View.VISIBLE);
-                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
+                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_up_30);
                 }else{
                     comment_rv.setVisibility(View.GONE);
-                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_down_24);
+                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_down_30);
                 }
             }
         });
@@ -277,10 +308,10 @@ public class AttractionDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (openTimeText.getVisibility() == View.GONE) {
                     openTimeText.setVisibility(View.VISIBLE);
-                    attnInfo_show_openTime.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
+                    attnInfo_show_openTime.setImageResource(R.drawable.baseline_keyboard_arrow_up_30);
                 } else {
                     openTimeText.setVisibility(View.GONE);
-                    attnInfo_show_openTime.setImageResource(R.drawable.baseline_keyboard_arrow_down_24);
+                    attnInfo_show_openTime.setImageResource(R.drawable.baseline_keyboard_arrow_down_30);
                 }
             }
         });
