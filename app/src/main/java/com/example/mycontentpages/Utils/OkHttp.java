@@ -18,8 +18,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OkHttp {
-  //  public static final String Base_url = "http://172.20.10.3:8090";
-    public static final String Base_url = "http://10.58.193.11:8090";
+    public static final String Base_url = "http://172.20.10.3:8090";
+   // public static final String Base_url = "http://10.58.193.11:8090";
     public static String sendGetRequest(String url) throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HandlerUtils())

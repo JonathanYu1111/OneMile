@@ -1,20 +1,13 @@
 package com.example.mycontentpages;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.example.mycontentpages.Utils.DataContainer;
-import com.example.mycontentpages.Utils.OkHttp;
 import com.example.mycontentpages.Utils.SpUtils;
 import com.example.mycontentpages.account.Account_guestUser;
 import com.example.mycontentpages.favorites.Fragment_Favorites;
@@ -22,11 +15,7 @@ import com.example.mycontentpages.home.Fragment_Home;
 import com.example.mycontentpages.login.*;
 import com.example.mycontentpages.profile.Fragment_Profile_signed;
 import com.example.mycontentpages.search.Fragment_Search;
-
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -79,14 +68,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (token != ""){
             i = 1;
         }
-
         System.out.println(i);
         //初始化viewpager
         initPager();
         //初始化UI
         initTabView();
-
-
     }
 
     private void initTabView() {
@@ -102,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivSearch=findViewById(R.id.tab_iv_search);
         ivFavorites=findViewById(R.id.tab_iv_favorites);
         ivProfile=findViewById(R.id.tab_iv_profile);
-
         ivHome.setSelected(true);
         ivCurrent=ivHome;
     }
@@ -115,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void changeTab(int position) {
-
-        Intent intent=new Intent(this, Account_guestUser.class);
 
         ivCurrent.setSelected(false);
 
@@ -172,10 +155,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ivProfile.setSelected(true);
                     ivCurrent=ivProfile;
                 }
-
                 break;
         }
-
     }
 
     @Override
