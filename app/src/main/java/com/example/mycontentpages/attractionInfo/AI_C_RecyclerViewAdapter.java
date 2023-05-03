@@ -13,10 +13,10 @@ import com.example.mycontentpages.R;
 import java.util.List;
 
 public class AI_C_RecyclerViewAdapter extends RecyclerView.Adapter<AI_C_RecyclerViewAdapter.MyViewHolder> {
-    private List<String> data;
+    private List<Comment> data;
     private Context context;
 
-    public AI_C_RecyclerViewAdapter(List<String> data, Context context) {
+    public AI_C_RecyclerViewAdapter(List<Comment> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -30,7 +30,7 @@ public class AI_C_RecyclerViewAdapter extends RecyclerView.Adapter<AI_C_Recycler
 
     @Override
     public void onBindViewHolder(@NonNull AI_C_RecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.tv.setText(data.get(position));
+        holder.tv.setText(data.get(position).getUsername()+":"+data.get(position).getContent());
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,9 +17,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alibaba.fastjson.JSON;
 import com.example.mycontentpages.MainActivity;
 import com.example.mycontentpages.R;
 import com.example.mycontentpages.Utils.OkHttp;
@@ -35,6 +39,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mycontentpages.Utils.DataContainer;
 import org.json.JSONObject;
+import com.example.mycontentpages.attractionInfo.Comment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +49,7 @@ import java.util.Random;
 
 public class AttractionDetailsActivity extends AppCompatActivity {
     List<String> attPicsUrl=new ArrayList<>();
-    List<String> commentList=new ArrayList<>();
+    List<Comment> commentList=new ArrayList<>();
 
     private ImageView collectionButton;
     int collectionFlag = 0;
@@ -183,19 +188,9 @@ public class AttractionDetailsActivity extends AppCompatActivity {
             getCollectStatus();
         }
 
-        //test2:add data into comment list
-        //the data should be provided from back end.
-        for (int i=0;i<25;i++){
-            String comment="user"+i+":"+"comment content"+i;
-            commentList.add(comment);
-        }
-        comment_rv= findViewById(R.id.attr_info_comment_rv);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        comment_rv.setLayoutManager(linearLayoutManager);
-        AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
-        comment_rv.setAdapter(ai_C_recyclerViewAdapter);
         showReadMore();
         showOpenTime();
+        showRating();
         showComment();
         addComment();
 
@@ -235,9 +230,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                             .setPositiveButton("commit", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
                                     String comment = commentBox.getText().toString();
-
                                     //send request
                                     new Thread(() -> {
                                         try {
@@ -248,7 +241,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                                             json.put("content", comment);
                                             json.put("place_id", placeID);
                                             String s = OkHttp.sendPostRequest("/review/add", String.valueOf(json));
-
+                                            Log.e("one", s);
                                             JSONObject jsonObject = new JSONObject(s);
                                             String res = jsonObject.getString("data");
                                             String code = jsonObject.getString("code");
@@ -263,6 +256,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                                             throw new RuntimeException(e);
                                         }
                                     }).start();
+
                                 }
                             })
                             .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -279,25 +273,62 @@ public class AttractionDetailsActivity extends AppCompatActivity {
 
                 }
             }
-        });
-    }
+ });
+}
+
 
 
     private void showComment() {
         ImageView attnInfo_show_comments = findViewById(R.id.attnInfo_show_comments);
+        //send request
+        new Thread(()->{
+            try {
+                //send json data convert to json
+                JSONObject json = new JSONObject();
+                json.put("place_id", placeID);
+                String s = OkHttp.sendPostRequest("/review/all", String.valueOf(json));
+                JSONObject jsonObject = new JSONObject(s);
+                String code = jsonObject.getString("code");
+                if (Integer.valueOf(code) != 20041){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(this, "Sorry, can not get the comments",Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
+
+                String commentArr = jsonObject.getString("data");
+                commentList = JSON.parseArray(commentArr, Comment.class);
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(()->{
+                    comment_rv= findViewById(R.id.attr_info_comment_rv);
+                    LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+                    comment_rv.setLayoutManager(linearLayoutManager);
+                    AI_C_RecyclerViewAdapter ai_C_recyclerViewAdapter =new AI_C_RecyclerViewAdapter(commentList,this);
+                    comment_rv.setAdapter(ai_C_recyclerViewAdapter);
+                });
+
+            } catch (Exception e) {
+                Log.e("one", e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+
 
         attnInfo_show_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(comment_rv.getVisibility()==View.GONE){
                     comment_rv.setVisibility(View.VISIBLE);
-                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_up_30);
+                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
                 }else{
                     comment_rv.setVisibility(View.GONE);
-                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_down_30);
+                    attnInfo_show_comments.setImageResource(R.drawable.baseline_keyboard_arrow_down_24);
                 }
-            }
-        });
+         }
+});
+
     }
 
     private void showOpenTime() {
@@ -390,5 +421,81 @@ public class AttractionDetailsActivity extends AppCompatActivity {
             }
         }).start();
     }
+    public void showRating(){
 
+        TextView tv_rating=findViewById(R.id.tv_rating);
+        RatingBar ratingBar=findViewById(R.id.attr_ratingBar);
+        ProgressBar excellent_pb=findViewById(R.id.excellent_pb);
+        ProgressBar good_pb=findViewById(R.id.good_pb);
+        ProgressBar avg_pb=findViewById(R.id.avg_pb);
+        ProgressBar poor_pb=findViewById(R.id.poor_pb);
+        ProgressBar awful_pb=findViewById(R.id.awful_pb);
+
+
+        //send request
+        new Thread(()->{
+            try {
+                JSONObject json = new JSONObject();
+                json.put("place_id", placeID);
+                String s = OkHttp.sendPostRequest("/review/score", String.valueOf(json));
+                JSONObject jsonObject = new JSONObject(s);
+                Log.e("one", s);
+                String code = jsonObject.getString("code");
+                if (Integer.valueOf(code) != 20041){
+                    Looper.prepare(); // 创建一个 Looper 对象
+                    Toast.makeText(getApplicationContext(), "Sorry, can not get the scores",Toast.LENGTH_LONG).show();
+                    Looper.loop(); // 开始消息循环
+                    return;
+                }
+
+                JSONObject placeObj = jsonObject.getJSONObject("data");
+                int totalNum = Integer.valueOf(placeObj.getString("totalNum"));
+                float sum=Float.valueOf(placeObj.getString("sum"));
+                int excellent=Integer.valueOf(placeObj.getInt("excellent"));
+                int good=Integer.valueOf(placeObj.getInt("good"));
+                int average=Integer.valueOf(placeObj.getInt("average"));
+                int poor=Integer.valueOf(placeObj.getInt("pool"));
+                int awful=Integer.valueOf(placeObj.getInt("awful"));
+
+
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(()->{
+                    if(totalNum==0){
+                        tv_rating.setText("No Rating yet");
+                        ratingBar.setRating(5f);
+                        excellent_pb.setMax(100);
+                        good_pb.setMax(100);
+                        avg_pb.setMax(100);
+                        poor_pb.setMax(100);
+                        awful_pb.setMax(100);
+                        excellent_pb.setProgress(0);
+                        good_pb.setProgress(0);
+                        avg_pb.setProgress(0);
+                        poor_pb.setProgress(0);
+                        awful_pb.setProgress(0);
+                    }else{
+                        float rate_avg=Math.round(sum/totalNum*10)*0.1f;
+                        tv_rating.setText(rate_avg+"");
+                        ratingBar.setRating(rate_avg);
+                        excellent_pb.setMax(totalNum);
+                        good_pb.setMax(totalNum);
+                        avg_pb.setMax(totalNum);
+                        poor_pb.setMax(totalNum);
+                        awful_pb.setMax(totalNum);
+                        excellent_pb.setProgress(excellent);
+                        good_pb.setProgress(good);
+                        avg_pb.setProgress(average);
+                        poor_pb.setProgress(poor);
+                        awful_pb.setProgress(awful);
+                    }
+
+
+                });
+
+            } catch (Exception e) {
+                Log.e("one", e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }).start();
+}
 }

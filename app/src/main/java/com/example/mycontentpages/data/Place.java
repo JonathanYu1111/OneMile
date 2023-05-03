@@ -291,15 +291,18 @@ public Place(){
        return urls.get(index);
     }
     public String getFirstPhoto(){
-//        String pureUrl=this.photos.substring(1,this.photos.length()-1);
-//        String[] arr=pureUrl.split(",");
-//        List<String> photos= Arrays.asList(arr);
+    //        String pureUrl=this.photos.substring(1,this.photos.length()-1);
+  //        String[] arr=pureUrl.split(",");
+  //        List<String> photos= Arrays.asList(arr);
        // return photos.get(0);
          String theUrl="url is blank";
          ArrayList<String> urls=new ArrayList<>();
-       urls.add("https://images.unsplash.com/photo-1681312407157-19ec16888a6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
-        urls.add("https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60");
-       urls.add( "https://images.unsplash.com/photo-1675111575738-80a06bbdb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
+    //   urls.add("https://images.unsplash.com/photo-1681312407157-19ec16888a6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
+   //     urls.add("https://images.unsplash.com/photo-1680095297939-5f69d7f139e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDF8YkRvNDhjVWh3bll8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60");
+    //   urls.add( "https://images.unsplash.com/photo-1675111575738-80a06bbdb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJEbzQ4Y1Vod25ZfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60");
+        urls.add(UrlTest.picUrl1);
+        urls.add(UrlTest.picUrl1);
+        urls.add(UrlTest.picUrl1);
         Random rand = new Random();
         int random = rand.nextInt(3);
         switch (random){
